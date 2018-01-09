@@ -1,3 +1,6 @@
 /ClientApp/node_modules
 /OnlineShop/bin
 /OnlineShop/obj
+/OnlineShop/Migrations
+**/*.db
+/.vscode

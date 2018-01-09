@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -24,10 +25,12 @@ namespace OnlineShop
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddDbContext<DAL.ShopContext>(options =>
+            options.UseSqlite("Data Source=OnlineShopDB.db"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DAL.ShopContext context)
         {
             if (env.IsDevelopment())
             {
@@ -35,6 +38,8 @@ namespace OnlineShop
             }
 
             app.UseMvc();
+
+            DAL.DbInitilaizer.Initialize(context);
         }
     }
 }
