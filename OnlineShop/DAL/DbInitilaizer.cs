@@ -13,10 +13,13 @@ namespace OnlineShop.DAL
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
+            byte[] passwordHash, passwordSalt;
+            HashHelper.CreatePasswordHash("test", out passwordHash, out passwordSalt);
             var user = new User
             {
                 Email = "test@shop.pl",
-                Password = "test",
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
                 Name = "Jan",
                 Surname = "Kowalski",
                 IsAdmin = false,
