@@ -4,3 +4,4 @@
 /OnlineShop/Migrations
 **/*.db
 /.vscode
+/OnlineShop/MyStaticFiles/images/*

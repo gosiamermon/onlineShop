@@ -42,8 +42,22 @@ namespace OnlineShop.DAL
             {
                 Name = "Top",
                 Description = "opis przedmiotu",
-                ImageSmall = "",
-                ImageBig = "",
+                ImageSmall = "/StaticFiles/images/1S.jpg",
+                ImageBig = "/StaticFiles/images/1B.jpg",
+                Cost = 32,
+                Color = "Red",
+                Size = "M",
+                Fabric = "Bawełna",
+                Gender = "K",
+                IsAvaiable = true,
+                ItemNumber = 10
+            };
+            Product p12 = new Product
+            {
+                Name = "Top2",
+                Description = "opis przedmiotu",
+                ImageSmall = "/StaticFiles/images/1S.jpg",
+                ImageBig = "/StaticFiles/images/1B.jpg",
                 Cost = 32,
                 Color = "Red",
                 Size = "M",
@@ -54,14 +68,30 @@ namespace OnlineShop.DAL
             };
             categoryTshirts.Products = new List<Product>();
             categoryTshirts.Products.Add(p1);
+            categoryTshirts.Products.Add(p12);
             producerHm.Products = new List<Product>();
             producerHm.Products.Add(p1);
+            producerHm.Products.Add(p12);
             Product p2 = new Product
             {
                 Name = "Top",
                 Description = "opis przedmiotu",
-                ImageSmall = "",
-                ImageBig = "",
+                ImageSmall = "/StaticFiles/images/1S.jpg",
+                ImageBig = "/StaticFiles/images/1B.jpg",
+                Cost = 122,
+                Color = "Red",
+                Size = "M",
+                Fabric = "Wełna",
+                Gender = "M",
+                IsAvaiable = true,
+                ItemNumber = 10
+            };
+            Product p22 = new Product
+            {
+                Name = "Top2",
+                Description = "opis przedmiotu",
+                ImageSmall = "/StaticFiles/images/1S.jpg",
+                ImageBig = "/StaticFiles/images/1B.jpg",
                 Cost = 122,
                 Color = "Red",
                 Size = "M",
@@ -72,8 +102,10 @@ namespace OnlineShop.DAL
             };
             categoryPulover.Products = new List<Product>();
             categoryPulover.Products.Add(p2);
+            categoryPulover.Products.Add(p22);
             producerCropp.Products = new List<Product>();
             producerCropp.Products.Add(p2);
+            producerCropp.Products.Add(p22);
 
             context.Categories.AddRange(categoryTshirts, categoryPulover);
             context.Producers.AddRange(producerHm, producerCropp);

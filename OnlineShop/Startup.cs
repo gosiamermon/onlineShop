@@ -14,6 +14,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
 namespace OnlineShop
 {
@@ -31,6 +34,7 @@ namespace OnlineShop
         {
             services.AddCors();
             services.AddMvc();
+            services.AddDirectoryBrowser();
             services.AddDbContext<DAL.ShopContext>(options => 
                 options.UseSqlite("Data Source=OnlineShopDB.db")
             );
@@ -63,6 +67,7 @@ namespace OnlineShop
 
             // configure DI for application repositories
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,6 +86,14 @@ namespace OnlineShop
                 .AllowCredentials());
 
             app.UseAuthentication();
+
+            app.UseFileServer(new FileServerOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), @"MyStaticFiles")),
+                RequestPath = new PathString("/StaticFiles"),
+                EnableDirectoryBrowsing = true
+            });
 
             app.UseMvc();
 

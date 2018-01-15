@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Microsoft.EntityFrameworkCore;
 using OnlineShop.DAL;
 using OnlineShop.Helpers;
 using OnlineShop.Models;
@@ -41,12 +41,14 @@ public interface IUserRepository
 
         public IEnumerable<User> GetAll()
         {
-            return _context.Users;
+            return _context.Users.Include(u => u.Address);
         }
 
         public User GetById(int id)
         {
-            return _context.Users.Find(id);
+            return _context.Users
+            .Include(u => u.Address)
+            .SingleOrDefault(u => u.UserId == id);
         }
 
         public User Create(User user, string password)
@@ -59,7 +61,6 @@ public interface IUserRepository
             HashHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.Address = new Address();
             _context.Users.Add(user);
             _context.SaveChanges();
             return user;
@@ -79,6 +80,7 @@ public interface IUserRepository
             user.Surname = userParam.Surname;
             user.Email = userParam.Email;
             user.IsAdmin = userParam.IsAdmin;
+            user.Address = userParam.Address;
             if (!string.IsNullOrWhiteSpace(password))
             {
                 byte[] passwordHash, passwordSalt;
