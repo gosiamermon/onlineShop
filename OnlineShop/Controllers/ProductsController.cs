@@ -9,7 +9,7 @@ using OnlineShop.Repositories;
 
 namespace OnlineShop
 {
-    [AllowAnonymous]
+    [Authorize]
     [Route("[controller]")]
     public class ProductsController : Controller
     {
@@ -22,6 +22,7 @@ namespace OnlineShop
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet("fewfirst/{amount}")]
         public IActionResult GetFewFirst([FromRoute]int amount)
         {
@@ -30,6 +31,7 @@ namespace OnlineShop
             return Ok(prouctDtos);
         }
 
+        [AllowAnonymous]
         [HttpGet("bycategory/{category}")]
         public IActionResult GetByCategory([FromRoute]string category)
         {
@@ -38,6 +40,7 @@ namespace OnlineShop
             return Ok(prouctDtos);
         }
 
+        [AllowAnonymous]
         [HttpGet("tocompare/{id1}/{id2}")]
         public IActionResult GetToCompare([FromRoute]int id1, int id2)
         {
@@ -46,6 +49,7 @@ namespace OnlineShop
             return Ok(prouctDtos);
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -54,6 +58,7 @@ namespace OnlineShop
             return Ok(prouctDtos);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
