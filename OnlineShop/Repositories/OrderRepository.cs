@@ -50,7 +50,7 @@ namespace OnlineShop
             items.Add(orderItem);
             Order order = new Order
             {
-                OrderDate = DateTime.Now.TimeOfDay,
+                OrderDate = DateTime.Now,
                 IsAccepted = false,
                 IsPaid = false,
                 TotalValue = orderItem.Subtotal,
@@ -133,12 +133,20 @@ namespace OnlineShop
                     break;
                 }
             }
+            order.TotalValue = CalculateTotalValue(order);
             _context.Products.Update(product);
             _context.Orders.Update(order);
             _context.SaveChangesAsync();
             return order;
         }
 
+        private double CalculateTotalValue(Order order) {
+            double total = 0;
+            foreach(OrderItem oi in order.OrderItems) {
+                total += oi.Subtotal;
+            }
+            return total;
+        }
         public void Delete(int orderId)
         {
             var order = _context.Orders.Find(orderId);
@@ -161,7 +169,7 @@ namespace OnlineShop
         {
             return _context.Orders
             .Include(o => o.User)
-            .Include(o => o.OrderItems)
+            .Include(o => o.OrderItems).ThenInclude(oi => oi.Product)
        //     .Include(o => o.PaymentMethod)
             .SingleOrDefault(o => o.OrderId == oredrId);
         }
@@ -169,10 +177,10 @@ namespace OnlineShop
         public IEnumerable<Order> GetOrdersReletedByUser(int userId)
         {
             return _context.Orders
-            .Include(o => o.OrderItems).ThenInclude(oi => oi.Product)
+            .Include(o => o.OrderItems)
             .Include(o => o.User)
-       //     .Include(o => o.PaymentMethod)
-            .Where(o => o.UserId == userId);    
+       //     .Include(o => o.PaymentMethod)  
+            .Where(o => o.UserId == userId);
         }
         
         public void PayOrder(int orderId)
@@ -180,9 +188,24 @@ namespace OnlineShop
             Order order = GetOrder(orderId);
             //payment
             order.IsPaid = true;
-            order.PaymentDate = DateTime.Now.TimeOfDay;
+            order.PaymentDate = DateTime.Now;
             _context.Orders.Update(order);
             _context.SaveChangesAsync();
+            string subject = "Potwierdzenie płatności";
+            string body = "Dzień dobry " + order.User.Email.Remove(order.User.Email.IndexOf("@")) + " \r\n \r\n"+
+            "Zakupiłaś(eś) " +  OrderItemsCount(order.OrderItems) +  " przedmiotów: \r\n" +
+            OrderedItemsToString(order.OrderItems) +
+            "Łączny koszt: " + order.TotalValue + " zł \r\n" +
+            "Data płatności: " + order.PaymentDate.ToString() + " \r\n \r\n" +
+            "Pozdrawiamy, OnlineShop Team";
+            try 
+            {
+                MailSender.Send(order.User.Email, subject, body);
+            } 
+            catch(Exception ex) 
+            {
+                throw new AppException("Cannot send email: " + ex.Message);
+            }
         }
 
         public Order RemoveFromBasket(int orderId, int productId)
@@ -210,9 +233,39 @@ namespace OnlineShop
         {
             Order order = GetOrder(orderId);
             order.IsAccepted = true;
-            order.AcceptedDate = DateTime.Now.TimeOfDay;
+            order.AcceptedDate = DateTime.Now;
             _context.Orders.Update(order);
             _context.SaveChangesAsync();
+            string subject = "Potwierdzenie zlożenia zamówienia";
+            string body = "Dzień dobry " + order.User.Email.Remove(order.User.Email.IndexOf("@")) + " \r\n \r\n"+
+            "Zamówiłaś(eś) " +  OrderItemsCount(order.OrderItems) +  " przedmiotów: \r\n" +
+            OrderedItemsToString(order.OrderItems) +
+            "Łączny koszt: " + order.TotalValue + " zł \r\n" +
+            "Data złożenia zamówienia: " + order.AcceptedDate.ToString() + " \r\n \r\n" +
+            "Pozdrawiamy, OnlineShop Team";
+            try 
+            {
+                MailSender.Send(order.User.Email, subject, body);
+            } 
+            catch(Exception ex) 
+            {
+                throw new AppException("Cannot send email: " + ex.Message);
+            }
+        }
+
+        private int OrderItemsCount(ICollection<OrderItem> orderItems) {
+            int result = 0;
+            foreach(OrderItem oi in orderItems) {
+                result += oi.ProductAmount;
+            }
+            return result;
+        }
+        private string OrderedItemsToString(ICollection<OrderItem> orderItems) {
+            string result = "";
+            foreach(OrderItem oi in orderItems) {
+                result += oi.Product.Name + " : " + oi.Product.Cost + " zł  x " + oi.ProductAmount + " = " + oi.Subtotal + " zł \r\n";
+            }
+            return result;
         }
 
         private Product GetProduct(int id, int amount) {
@@ -235,7 +288,8 @@ namespace OnlineShop
         }
         private Order GetOrder(int id) {
             var order = _context.Orders
-            .Include(o => o.OrderItems)
+            .Include(o => o.OrderItems).ThenInclude(oi => oi.Product)
+            .Include(o => o.User)
             .SingleOrDefault(o => o.OrderId == id);
             if (order == null)
                 throw new AppException("Order not found");
