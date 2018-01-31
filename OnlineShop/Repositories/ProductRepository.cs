@@ -84,7 +84,7 @@ namespace OnlineShop.Repositories
             .Include(p => p.Category)
             .Include(p => p.Producer)
             .Include(p => p.Opinions)
-            .Take(amount);
+            .Take(amount).OrderBy(p => p.Name);
         }
 
         public IEnumerable<Product> GetToCompare(int id1, int id2)

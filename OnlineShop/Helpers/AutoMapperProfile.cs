@@ -49,6 +49,16 @@ namespace OnlineShop.Helpers
             .ForMember(p => p.Producer, m => m.MapFrom(
                 pd => new Producer{Name = pd.Producer}
             ));
+            CreateMap<OrderItem, OrderItemDto>()
+            .ForMember(oid => oid.ProductName, m => m.MapFrom(
+                oi => oi.Product.Name
+            ));
+            CreateMap<Order, OrderDto>();
+            CreateMap<OrderDto, Order>();
+            CreateMap<Order, OrderDetailsDto>()
+            .ForMember(op => op.UserEmail, m => m.MapFrom(
+                o => o.User.Email
+            ));
         }
     }
 }

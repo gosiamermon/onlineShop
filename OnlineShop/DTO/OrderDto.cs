@@ -1,13 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace OnlineShop.Models
+namespace OnlineShop.DTO
 {
-    public class Order
+    public class OrderDto
     {
         public int OrderId { get; set; }
         public TimeSpan OrderDate { get; set; }
@@ -19,12 +17,5 @@ namespace OnlineShop.Models
         public bool IsCompleted { get; set; }
         public TimeSpan CompletedDate { get; set; }
 
-        public int UserId { get; set; }
-        public User User { get; set; }
-
-        // public int PaymentMethodId { get; set; }
-        // public PaymentMethod PaymentMethod { get; set; }
-
-        public ICollection<OrderItem> OrderItems { get; set; }
     }
 }

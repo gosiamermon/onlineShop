@@ -10,9 +10,10 @@ namespace OnlineShop.DAL
     {
         public static void Initialize(ShopContext context)
         {
-            context.Database.EnsureDeleted();
+      //      context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
+            if(!context.Products.Any()) {
             byte[] passwordHash, passwordSalt;
             HashHelper.CreatePasswordHash("test", out passwordHash, out passwordSalt);
             var user = new User
@@ -111,6 +112,7 @@ namespace OnlineShop.DAL
             context.Producers.AddRange(producerHm, producerCropp);
 
             context.SaveChangesAsync();
+            }
         }
 
     }

@@ -17,7 +17,7 @@ namespace OnlineShop.DAL
         public DbSet<Opinion> Opinions { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+//        public DbSet<PaymentMethod> PaymentMethods { get; set; }
         public DbSet<Producer> Producers { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
@@ -49,11 +49,11 @@ namespace OnlineShop.DAL
                     .HasForeignKey(o => o.UserId)
                     .HasPrincipalKey(u => u.UserId);
 
-                modelBuilder.Entity<Order>()
-                    .HasOne(o => o.PaymentMethod)
-                    .WithMany(pm => pm.Orders)
-                    .HasForeignKey(o => o.PaymentMethodId)
-                    .HasPrincipalKey(u => u.PaymentMethodId);
+                // modelBuilder.Entity<Order>()
+                //     .HasOne(o => o.PaymentMethod)
+                //     .WithMany(pm => pm.Orders)
+                //     .HasForeignKey(o => o.PaymentMethodId)
+                //     .HasPrincipalKey(u => u.PaymentMethodId);
 
                 modelBuilder.Entity<OrderItem>()
                     .HasOne(o => o.Product)
