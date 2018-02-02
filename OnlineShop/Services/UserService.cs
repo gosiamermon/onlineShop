@@ -6,9 +6,9 @@ using OnlineShop.DAL;
 using OnlineShop.Helpers;
 using OnlineShop.Models;
 
-namespace OnlineShop.Repositories
+namespace OnlineShop.Service
 {
-public interface IUserRepository
+public interface IUserService
     {
         User Authenticate(string email, string password);
         IEnumerable<User> GetAll();
@@ -18,11 +18,11 @@ public interface IUserRepository
         void Delete(int id);
     }
 
-    public class UserRepository : IUserRepository
+    public class UserService : IUserService
     {
         private ShopContext _context;
 
-        public UserRepository(ShopContext context)
+        public UserService(ShopContext context)
         {
             _context = context;
         }

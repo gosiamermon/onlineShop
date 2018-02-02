@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using OnlineShop.Repositories;
+using OnlineShop.Service;
 using AutoMapper;
 using OnlineShop.Helpers;
 using OnlineShop.DTO;
@@ -19,16 +19,16 @@ namespace OnlineShop.Controllers
     [Route("[controller]")]
     public class UsersController : Controller
     {
-        private IUserRepository _userRepository;
+        private IUserService _userService;
         private IMapper _mapper;
         private readonly AppSettings _appSettings;
 
         public UsersController(
-            IUserRepository userRepository,
+            IUserService userService,
             IMapper mapper,
             IOptions<AppSettings> appSettings)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _mapper = mapper;
             _appSettings = appSettings.Value;
         }
@@ -37,7 +37,7 @@ namespace OnlineShop.Controllers
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody]UserDto userDto)
         {
-            var user = _userRepository.Authenticate(userDto.Email, userDto.Password);
+            var user = _userService.Authenticate(userDto.Email, userDto.Password);
             if (user == null)
                 return BadRequest("Email or password is incorrect");
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -70,7 +70,7 @@ namespace OnlineShop.Controllers
             var user = _mapper.Map<User>(userDto);
             try 
             {
-                _userRepository.Create(user, userDto.Password);
+                _userService.Create(user, userDto.Password);
                 return Ok();
             } 
             catch(AppException ex)
@@ -82,7 +82,7 @@ namespace OnlineShop.Controllers
         [HttpGet]
         public IActionResult GetAll()
         {
-            var users =  _userRepository.GetAll();
+            var users =  _userService.GetAll();
             var userDtos = _mapper.Map<IList<UserDto>>(users);
             return Ok(userDtos);
         }
@@ -90,7 +90,7 @@ namespace OnlineShop.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var user =  _userRepository.GetById(id);
+            var user =  _userService.GetById(id);
             var userDto = _mapper.Map<UserDto>(user);
             return Ok(userDto);
         }
@@ -102,7 +102,7 @@ namespace OnlineShop.Controllers
             user.UserId = id;
             try 
             {
-                _userRepository.Update(user, userDto.Password);
+                _userService.Update(user, userDto.Password);
                 return Ok();
             } 
             catch(AppException ex)
@@ -114,7 +114,7 @@ namespace OnlineShop.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _userRepository.Delete(id);
+            _userService.Delete(id);
             return Ok();
         }
     }

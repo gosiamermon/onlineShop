@@ -7,9 +7,9 @@ using OnlineShop.DAL;
 using OnlineShop.Helpers;
 using OnlineShop.Models;
 
-namespace OnlineShop.Repositories
+namespace OnlineShop.Service
 {
-    public interface IProductRepository
+    public interface IProductService
     {
         IEnumerable<Product> GetAll();
         IEnumerable<Product> GetFewFirst(int amount);
@@ -21,11 +21,11 @@ namespace OnlineShop.Repositories
         void Delete(int id);
     }
 
-    public class ProductRepository : IProductRepository
+    public class ProductService : IProductService
     {
         private ShopContext _context;
 
-        public ProductRepository(ShopContext context)
+        public ProductService(ShopContext context)
         {
             _context = context;
         }

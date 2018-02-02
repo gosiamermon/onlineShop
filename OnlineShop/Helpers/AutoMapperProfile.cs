@@ -53,12 +53,14 @@ namespace OnlineShop.Helpers
             .ForMember(oid => oid.ProductName, m => m.MapFrom(
                 oi => oi.Product.Name
             ));
-            CreateMap<Order, OrderDto>();
-            CreateMap<OrderDto, Order>();
+            CreateMap<Order, OrderObjDto>();
+            CreateMap<OrderObjDto, Order>();
             CreateMap<Order, OrderDetailsDto>()
             .ForMember(op => op.UserEmail, m => m.MapFrom(
                 o => o.User.Email
             ));
+            CreateMap<Opinion, OpinionDto>();
+            CreateMap<OpinionDto, Opinion>();
         }
     }
 }

@@ -6,9 +6,9 @@ using OnlineShop.DAL;
 using OnlineShop.Helpers;
 using OnlineShop.Models;
 
-namespace OnlineShop
+namespace OnlineShop.Service
 {
-    public interface IOrderRepository
+    public interface IOrderService
     {
         Order Create(int userId, int productId, int amount);
         Order AddToBasket(int orderId, int productId, int amount);
@@ -22,11 +22,11 @@ namespace OnlineShop
         void PayOrder(int orderId);
     }
 
-    public class OrderRepository : IOrderRepository
+    public class OrderService : IOrderService
     {
         private ShopContext _context;
 
-        public OrderRepository(ShopContext context)
+        public OrderService(ShopContext context)
         {
             _context = context;
         }
@@ -79,6 +79,8 @@ namespace OnlineShop
             if(amount <= 0) 
                 throw new AppException("Incorrect product amount");
             Order order = GetOrder(orderId);
+            if(order.IsAccepted)
+                throw new AppException("Cannot modify accepted order");
             Product product = GetProduct(productId, amount);
             if(order.OrderItems == null)
                 order.OrderItems = new List<OrderItem>();
@@ -104,6 +106,8 @@ namespace OnlineShop
             if(amount <= 0) 
                 throw new AppException("Incorrect product amount");
             Order order = GetOrder(orderId);
+            if(order.IsAccepted)
+                throw new AppException("Cannot modify accepted order");
             Product product = GetProduct(productId);
             if(order.OrderItems == null || product.OrderItems == null)
                  throw new AppException("Order item not found");
@@ -186,7 +190,8 @@ namespace OnlineShop
         public void PayOrder(int orderId)
         {  
             Order order = GetOrder(orderId);
-            //payment
+            if(order.IsPaid)
+                throw new AppException("Order already paid");
             order.IsPaid = true;
             order.PaymentDate = DateTime.Now;
             _context.Orders.Update(order);
@@ -211,6 +216,8 @@ namespace OnlineShop
         public Order RemoveFromBasket(int orderId, int productId)
         {
             Order order = GetOrder(orderId);
+            if(order.IsAccepted)
+                throw new AppException("Cannot modify accepted order");
             Product product = GetProduct(productId);
             if(order.OrderItems == null || product.OrderItems == null)
                  throw new AppException("Order item not found");
@@ -232,6 +239,8 @@ namespace OnlineShop
         public void SubmitOrder(int orderId)
         {
             Order order = GetOrder(orderId);
+            if(order.IsAccepted)
+                throw new AppException("Order already accepted"); 
             order.IsAccepted = true;
             order.AcceptedDate = DateTime.Now;
             _context.Orders.Update(order);

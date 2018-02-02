@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using OnlineShop.DTO;
 using OnlineShop.Helpers;
 using OnlineShop.Models;
+using OnlineShop.Service;
 
 namespace OnlineShop
 {
@@ -14,22 +15,21 @@ namespace OnlineShop
     [Route("[controller]")]
     public class OrderController : Controller
     {
-        private readonly IOrderRepository _orderRepository;
+        private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
 
-
-          public OrderController(IOrderRepository orderRepository, IMapper mapper)
+          public OrderController(IOrderService orderService, IMapper mapper)
         {
-            _orderRepository = orderRepository;
+            _orderService = orderService;
             _mapper = mapper;
         }
         
-        [HttpPost("Create/{userId}/{productId}/{amount}")]
-        public IActionResult Create([FromRoute] int userId, int productId, int amount)
+        [HttpPost("Create")]
+        public IActionResult Create([FromBody] OrderDto orderDto)
         {
             try
             {
-                _orderRepository.Create(userId, productId, amount);
+                _orderService.Create(orderDto.UserId, orderDto.ProductId, orderDto.Amount);
                 return Ok();
             } catch(AppException ex) 
             {
@@ -37,12 +37,12 @@ namespace OnlineShop
             }
         }
 
-        [HttpPost("AddToBasket/{orderId}/{productId}/{amount}")]
-        public IActionResult AddToBasket([FromRoute] int orderId, int productId, int amount)
+        [HttpPost("AddToBasket")]
+        public IActionResult AddToBasket([FromBody] OrderDto orderDto)
         {
             try
             {
-                _orderRepository.AddToBasket(orderId, productId, amount);
+                _orderService.AddToBasket(orderDto.OrderId, orderDto.ProductId, orderDto.Amount);
                 return Ok();
             } catch(AppException ex) 
             {
@@ -50,12 +50,12 @@ namespace OnlineShop
             }
         }
 
-        [HttpPost("RemoveFromBasket/{orderId}/{productId}")]
+        [HttpDelete("RemoveFromBasket/{orderId}/{productId}")]
         public IActionResult RemoveFromBasket([FromRoute] int orderId, int productId)
         {
             try
             {
-                _orderRepository.RemoveFromBasket(orderId, productId);
+                _orderService.RemoveFromBasket(orderId, productId);
                 return Ok();
             } catch(AppException ex) 
             {
@@ -63,12 +63,12 @@ namespace OnlineShop
             }
         }
 
-        [HttpPost("ChangeAmount/{orderId}/{productId}/{amount}")]
-        public IActionResult ChangeAmount([FromRoute] int orderId, int productId, int amount)
+        [HttpPost("ChangeAmount")]
+        public IActionResult ChangeAmount([FromBody] OrderDto orderDto)
         {
             try
             {
-                _orderRepository.ChangeAmount(orderId, productId, amount);
+                _orderService.ChangeAmount(orderDto.OrderId, orderDto.ProductId, orderDto.Amount);
                 return Ok();
             } catch(AppException ex) 
             {
@@ -79,16 +79,16 @@ namespace OnlineShop
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _orderRepository.Delete(id);
+            _orderService.Delete(id);
             return Ok();
         }
 
-        [HttpPost("SubmitOrder/{orderId}")]
-        public IActionResult SubmitOrder([FromRoute] int orderId)
+        [HttpGet("SubmitOrder/{orderId}")]
+        public IActionResult SubmitOrder(int orderId)
         {
             try
             {
-                _orderRepository.SubmitOrder(orderId);
+                _orderService.SubmitOrder(orderId);
                 return Ok();
             } 
             catch(AppException ex) 
@@ -100,33 +100,33 @@ namespace OnlineShop
         [HttpGet]
         public IActionResult GetAll()
         {
-            var orders = _orderRepository.GetAll();
-            var ordersDto = _mapper.Map<IList<OrderDto>>(orders);
+            var orders = _orderService.GetAll();
+            var ordersDto = _mapper.Map<IList<OrderObjDto>>(orders);
             return Ok(ordersDto);
         }
 
         [HttpGet("GetAllReletedByUser/{userId}")]
         public IActionResult GetAllReletedByUser(int userId)
         {
-            var orders = _orderRepository.GetOrdersReletedByUser(userId);
-            var ordersDto = _mapper.Map<IList<OrderDto>>(orders);
+            var orders = _orderService.GetOrdersReletedByUser(userId);
+            var ordersDto = _mapper.Map<IList<OrderObjDto>>(orders);
             return Ok(ordersDto);
         }
 
         [HttpGet("GetOrderById/{orderId}")]
         public IActionResult GetOrderById(int orderId) 
         {
-            var order = _orderRepository.GetOrderById(orderId);
+            var order = _orderService.GetOrderById(orderId);
             var orderDetailsDto = _mapper.Map<OrderDetailsDto>(order);
             return Ok(orderDetailsDto);
         }
 
-        [HttpPost("PayOrder/{orderId}")]
-        public IActionResult PayOrder([FromRoute] int orderId) 
+        [HttpGet("PayOrder/{orderId}")]
+        public IActionResult PayOrder(int orderId) 
         {
             try
             {
-                _orderRepository.PayOrder(orderId);
+                _orderService.PayOrder(orderId);
                 return Ok();
             } 
             catch(AppException ex) 

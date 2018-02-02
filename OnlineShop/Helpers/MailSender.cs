@@ -6,7 +6,7 @@ namespace OnlineShop
 {
     public class MailSender
     {
-        private const string Email = "mail@gmail.com";
+        private const string Email = "mailtotest098@gmail.com";
         private const string Password = "pass";
         public static void Send(string email, string subject, string body)
         {
@@ -16,7 +16,6 @@ namespace OnlineShop
                 EnableSsl = true
             };
             client.Send(Email, email, subject, body);
-
         }
     }
 }
