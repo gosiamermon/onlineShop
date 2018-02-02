@@ -34,10 +34,22 @@ namespace OnlineShop.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]UserDto userDto)
+        [HttpPost("authenticateUser")]
+        public IActionResult AuthenticateUser([FromBody]LoginDto loginDto)
         {
-            var user = _userService.Authenticate(userDto.Email, userDto.Password);
+            var user = _userService.AuthenticateUser(loginDto.Email, loginDto.Password);
+            return Authenticate(user);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("authenticateAdmin")]
+        public IActionResult AuthenticateAdmin([FromBody]LoginDto loginDto)
+        {
+            var user = _userService.AuthenticateAdmin(loginDto.Email, loginDto.Password);
+            return Authenticate(user);
+        }
+
+        private IActionResult Authenticate(User user) {
             if (user == null)
                 return BadRequest("Email or password is incorrect");
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -64,13 +76,29 @@ namespace OnlineShop.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register([FromBody]UserDto userDto)
+        [HttpPost("registerUser")]
+        public IActionResult RegisterUser([FromBody]UserDto userDto)
         {
             var user = _mapper.Map<User>(userDto);
             try 
             {
-                _userService.Create(user, userDto.Password);
+                _userService.Create(user, userDto.Password, false);
+                return Ok();
+            } 
+            catch(AppException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpPost("registerAdmin")]
+        public IActionResult RegisterAdmin([FromBody]UserDto userDto)
+        {
+            var user = _mapper.Map<User>(userDto);
+            try 
+            {
+                _userService.Create(user, userDto.Password, true);
                 return Ok();
             } 
             catch(AppException ex)

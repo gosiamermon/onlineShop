@@ -12,7 +12,7 @@ namespace OnlineShop.DAL
         public ShopContext(DbContextOptions<ShopContext> options) : base(options)
         {
         }
-        public DbSet<Address> Addresses { get; set; }
+//        public DbSet<Address> Addresses { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Opinion> Opinions { get; set; }
         public DbSet<Order> Orders { get; set; }
@@ -25,10 +25,10 @@ namespace OnlineShop.DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
              // Relationships 1/3: one-to-zero or one
-                modelBuilder.Entity<Address>() // Address is principal 
-                    .HasOne(a => a.User)    // User is dependent
-                    .WithOne(u => u.Address)
-                    .HasForeignKey<User>(u => u.AddressId);
+                // modelBuilder.Entity<Address>() // Address is principal 
+                //     .HasOne(a => a.User)    // User is dependent
+                //     .WithOne(u => u.Address)
+                //     .HasForeignKey<User>(u => u.AddressId);
 
                 // Relationship 2/3: one-to-many
                 modelBuilder.Entity<Product>() // Product is dependent
