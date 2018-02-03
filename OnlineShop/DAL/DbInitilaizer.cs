@@ -13,7 +13,7 @@ namespace OnlineShop.DAL
       //      context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            if(!context.Products.Any()) {
+            //if(!context.Products.Any()) {
             byte[] passwordHash, passwordSalt;
             HashHelper.CreatePasswordHash("test", out passwordHash, out passwordSalt);
             var user = new User
@@ -112,7 +112,7 @@ namespace OnlineShop.DAL
             context.Producers.AddRange(producerHm, producerCropp);
 
             context.SaveChangesAsync();
-            }
+            //}
         }
 
     }

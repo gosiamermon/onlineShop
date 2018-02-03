@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { main, users, products, orders } from "../helpers/routes"
+import { main, adminPanelUsers, adminPanelProducts, adminPanelOrders } from "../helpers/routes"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
 
@@ -20,9 +20,9 @@ class Sidebar extends Component {
                         </a>
                     </li>
                     <li>
-                        <Link to={users}>Users</Link>
-                        <Link to={products}>Products</Link>
-                        <Link to={orders}>Orders</Link>
+                        <Link to={adminPanelUsers}>Users</Link>
+                        <Link to={adminPanelProducts}>Products</Link>
+                        <Link to={adminPanelOrders}>Orders</Link>
                     </li>
                 </ul>
             </div>

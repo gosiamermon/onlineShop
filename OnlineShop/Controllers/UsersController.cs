@@ -15,7 +15,7 @@ using OnlineShop.Models;
 
 namespace OnlineShop.Controllers
 {
-    [Authorize]
+    // [Authorize]
     [Route("[controller]")]
     public class UsersController : Controller
     {
