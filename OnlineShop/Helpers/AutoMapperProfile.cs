@@ -9,32 +9,8 @@ namespace OnlineShop.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<User, UserDto>()
-            .ForMember(ud => ud.City, m => m.MapFrom(
-                u => u.Address.City
-            ))
-            .ForMember(ud => ud.Zippcode, m => m.MapFrom(
-                u => u.Address.Zippcode
-            ))
-            .ForMember(ud => ud.Street, m => m.MapFrom(
-                u => u.Address.Street
-            ))
-            .ForMember(ud => ud.HouseNumber, m => m.MapFrom(
-                u => u.Address.HouseNumber
-            ))
-            .ForMember(ud => ud.ApartmentNumber, m => m.MapFrom(
-                u => u.Address.ApartmentNumber
-            ));
-            CreateMap<UserDto, User>()
-            .ForMember(u => u.Address, m => m.MapFrom(
-                ud => new Address {
-                    City = ud.City,
-                    Zippcode = ud.Zippcode,
-                    Street = ud.Street,
-                    HouseNumber = ud.HouseNumber,
-                    ApartmentNumber = ud.ApartmentNumber
-                }
-            ));
+            CreateMap<User, UserDto>();
+            CreateMap<UserDto, User>();
             CreateMap<Product, ProductDto>()
             .ForMember(pd => pd.Category, m => m.MapFrom(
                 p => p.Category.Name
@@ -53,12 +29,14 @@ namespace OnlineShop.Helpers
             .ForMember(oid => oid.ProductName, m => m.MapFrom(
                 oi => oi.Product.Name
             ));
-            CreateMap<Order, OrderDto>();
-            CreateMap<OrderDto, Order>();
+            CreateMap<Order, OrderObjDto>();
+            CreateMap<OrderObjDto, Order>();
             CreateMap<Order, OrderDetailsDto>()
             .ForMember(op => op.UserEmail, m => m.MapFrom(
                 o => o.User.Email
             ));
+            CreateMap<Opinion, OpinionDto>();
+            CreateMap<OpinionDto, Opinion>();
         }
     }
 }

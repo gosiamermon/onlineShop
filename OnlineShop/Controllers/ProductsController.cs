@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OnlineShop.DTO;
 using OnlineShop.Helpers;
 using OnlineShop.Models;
-using OnlineShop.Repositories;
+using OnlineShop.Service;
 
 namespace OnlineShop
 {
@@ -13,12 +13,12 @@ namespace OnlineShop
     [Route("[controller]")]
     public class ProductsController : Controller
     {
-        private IProductRepository _productRepository;
+        private IProductService _productService;
         private IMapper _mapper;
 
-        public ProductsController(IProductRepository productRepository, IMapper mapper)
+        public ProductsController(IProductService productService, IMapper mapper)
         {
-            _productRepository = productRepository;
+            _productService = productService;
             _mapper = mapper;
         }
 
@@ -26,7 +26,7 @@ namespace OnlineShop
         [HttpGet("fewfirst/{amount}")]
         public IActionResult GetFewFirst([FromRoute]int amount)
         {
-            var product = _productRepository.GetFewFirst(amount);
+            var product = _productService.GetFewFirst(amount);
             var prouctDtos = _mapper.Map<IList<ProductDto>>(product);
             return Ok(prouctDtos);
         }
@@ -35,7 +35,7 @@ namespace OnlineShop
         [HttpGet("bycategory/{category}")]
         public IActionResult GetByCategory([FromRoute]string category)
         {
-            var product = _productRepository.GetByCategory(category);
+            var product = _productService.GetByCategory(category);
             var prouctDtos = _mapper.Map<IList<ProductDto>>(product);
             return Ok(prouctDtos);
         }
@@ -44,7 +44,7 @@ namespace OnlineShop
         [HttpGet("tocompare/{id1}/{id2}")]
         public IActionResult GetToCompare([FromRoute]int id1, int id2)
         {
-            var product = _productRepository.GetToCompare(id1, id2);;
+            var product = _productService.GetToCompare(id1, id2);;
             var prouctDtos = _mapper.Map<IList<ProductDto>>(product);
             return Ok(prouctDtos);
         }
@@ -53,7 +53,7 @@ namespace OnlineShop
         [HttpGet]
         public IActionResult GetAll()
         {
-            var product =  _productRepository.GetAll();
+            var product =  _productService.GetAll();
             var prouctDtos = _mapper.Map<IList<ProductDto>>(product);
             return Ok(prouctDtos);
         }
@@ -62,7 +62,7 @@ namespace OnlineShop
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
-            var product =  _productRepository.GetById(id);
+            var product =  _productService.GetById(id);
             var productDto = _mapper.Map<ProductDto>(product);
             return Ok(productDto);
         }
@@ -73,7 +73,7 @@ namespace OnlineShop
             var product = _mapper.Map<Product>(productDto);
             try 
             {
-                _productRepository.Create(product);
+                _productService.Create(product);
                 return Ok();
             } 
             catch(AppException ex)
@@ -89,7 +89,7 @@ namespace OnlineShop
             product.ProductId = id;
             try 
             {
-                _productRepository.Update(product);
+                _productService.Update(product);
                 return Ok();
             } 
             catch(AppException ex)
@@ -101,7 +101,7 @@ namespace OnlineShop
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            _productRepository.Delete(id);
+            _productService.Delete(id);
             return Ok();
         }
     }

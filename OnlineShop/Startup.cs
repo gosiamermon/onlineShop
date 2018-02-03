@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using OnlineShop.Helpers;
-using OnlineShop.Repositories;
 using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -17,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using OnlineShop.Service;
 
 namespace OnlineShop
 {
@@ -66,9 +66,10 @@ namespace OnlineShop
             });
 
             // configure DI for application repositories
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOpinionService, OpinionService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

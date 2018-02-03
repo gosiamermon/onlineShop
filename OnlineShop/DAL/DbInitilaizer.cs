@@ -10,7 +10,7 @@ namespace OnlineShop.DAL
     {
         public static void Initialize(ShopContext context)
         {
-      //      context.Database.EnsureDeleted();
+            context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
             //if(!context.Products.Any()) {
@@ -24,14 +24,7 @@ namespace OnlineShop.DAL
                 Name = "Jan",
                 Surname = "Kowalski",
                 IsAdmin = false,
-                Address = new Address
-                {
-                    City = "Gliwice",
-                    Zippcode = "44-100",
-                    Street = "Akademicka",
-                    HouseNumber = "13",
-                    ApartmentNumber = "2"
-                }
+                Address = "44-100 Gliwice, Akademicka 13/2"
             };
             context.Add(user);
 

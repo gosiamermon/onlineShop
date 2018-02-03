@@ -13,11 +13,9 @@ namespace OnlineShop.Models
         public byte[] PasswordSalt { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string Address {get; set;}
         public bool IsAdmin { get; set; }
         
-        public int AddressId { get; set; }
-        public Address Address { get; set; }
-
         public ICollection<Order> Orders { get; set; }
         public ICollection<Opinion> Opinions { get; set; }
 

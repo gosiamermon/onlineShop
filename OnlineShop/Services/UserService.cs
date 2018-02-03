@@ -6,28 +6,29 @@ using OnlineShop.DAL;
 using OnlineShop.Helpers;
 using OnlineShop.Models;
 
-namespace OnlineShop.Repositories
+namespace OnlineShop.Service
 {
-public interface IUserRepository
+public interface IUserService
     {
-        User Authenticate(string email, string password);
+        User AuthenticateUser(string email, string password);
+        User AuthenticateAdmin(string email, string password);
         IEnumerable<User> GetAll();
         User GetById(int id);
-        User Create(User user, string password);
+        User Create(User user, string password, bool isAdmin);
         void Update(User user, string password);
         void Delete(int id);
     }
 
-    public class UserRepository : IUserRepository
+    public class UserService : IUserService
     {
         private ShopContext _context;
 
-        public UserRepository(ShopContext context)
+        public UserService(ShopContext context)
         {
             _context = context;
         }
 
-        public User Authenticate(string email, string password)
+        public User AuthenticateUser(string email, string password)
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 return null;
@@ -35,6 +36,15 @@ public interface IUserRepository
             if (user == null)
                 return null;
             if (!HashHelper.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+                return null;
+            return user;
+        }
+
+        public User AuthenticateAdmin(string email, string password) {
+            User user = AuthenticateUser(email, password);
+            if(user == null)
+                return null;
+            if(!user.IsAdmin)
                 return null;
             return user;
         }
@@ -51,7 +61,7 @@ public interface IUserRepository
             .SingleOrDefault(u => u.UserId == id);
         }
 
-        public User Create(User user, string password)
+        public User Create(User user, string password, bool isAdmin)
         {
             if (string.IsNullOrWhiteSpace(password))
                 throw new AppException("Password is required");
@@ -61,6 +71,7 @@ public interface IUserRepository
             HashHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.IsAdmin = isAdmin;
             _context.Users.Add(user);
             _context.SaveChanges();
             return user;

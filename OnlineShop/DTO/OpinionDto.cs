@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace OnlineShop.DTO
 {
-    public class OrderDto
+    public class OpinionDto
     {
-        public int OrderId {get; set;}
-        public int UserId {get; set;}
         public int ProductId {get; set;}
-        public int Amount {get; set;}
+        public int UserId {get; set;}
+        public string Content {get; set;}
     }
 }
