@@ -1,0 +1,1 @@
+export const ORDERS_FETCHED = 'ORDERS/FETCHED'

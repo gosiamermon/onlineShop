@@ -28,8 +28,8 @@ namespace OnlineShop.DAL
             };
             context.Add(user);
 
-            Category categoryTshirts = new Category { Name = "Koszulki" };
-            Category categoryPulover = new Category { Name = "Swetry" };
+            Category categoryTshirts = new Category { Name = "T-Shirt" };
+            Category categoryPulover = new Category { Name = "Pullover" };
             Producer producerHm = new Producer { Name = "H&M" };
             Producer producerCropp = new Producer { Name = "Cropp" };
             Product p1 = new Product
@@ -42,7 +42,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Bawełna",
-                Gender = "K",
+                Gender = "Female",
                 IsAvaiable = true,
                 ItemNumber = 10
             };
@@ -56,7 +56,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Bawełna",
-                Gender = "K",
+                Gender = "Female",
                 IsAvaiable = true,
                 ItemNumber = 10
             };
@@ -76,7 +76,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Wełna",
-                Gender = "M",
+                Gender = "Male",
                 IsAvaiable = true,
                 ItemNumber = 10
             };
@@ -90,7 +90,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Wełna",
-                Gender = "M",
+                Gender = "Male",
                 IsAvaiable = true,
                 ItemNumber = 10
             };

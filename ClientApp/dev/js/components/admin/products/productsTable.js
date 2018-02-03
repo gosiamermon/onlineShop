@@ -5,49 +5,54 @@ import { Link } from "react-router-dom";
 import { Panel, Nav, Modal, Button } from "react-bootstrap";
 import { push } from "connected-react-router";
 var ReactTable = require("react-table").default;
-import { getAllUsers, deleteUser, getUser } from '../../../actions/users/users.action-creators'
-import { adminPanelUsers } from '../../../helpers/routes'
+import { getAllProducts, deleteProduct, getProduct } from '../../../actions/products/products.action-creators'
+import { adminPanelProducts } from '../../../helpers/routes'
 
-class UsersTableComponent extends Component {
+
+class ProductsTableComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            showModal: false,
-            userIdToDelete: ""
+            productIdToDelete: null,
+            showModal: false
         }
     }
 
-
     componentDidMount() {
-        this.props.getAllUsers()
+        this.props.getAllProducts()
     }
 
     render() {
-        const { users } = this.props
+        const { products } = this.props
+
         const columns = [
+            {
+                Header: "Category",
+                accessor: "category"
+            },
             {
                 Header: "Name",
                 accessor: "name"
             },
             {
-                Header: "Surname",
-                accessor: "surname"
+                Header: "Producer",
+                accessor: "producer"
             },
             {
-                Header: "Address",
-                accessor: "address"
+                Header: "Cost",
+                accessor: "cost"
             },
             {
-                Header: "e-mail",
-                accessor: "email"
+                Header: "Gender",
+                accessor: "gender"
             },
             {
-                Header: "Role",
-                accessor: "role"
+                Header: "Fabric",
+                accessor: "fabric"
             },
             {
                 Header: "Edit",
-                accessor: "userId",
+                accessor: "productId",
                 filterable: false,
                 Cell: row => {
                     return (
@@ -55,7 +60,7 @@ class UsersTableComponent extends Component {
                             <button
                                 className="btn btn-info"
                                 onClick={() => {
-                                    this.editUser(row.value)
+                                    this.editProduct(row.value)
                                 }}
                             >
                                 edit
@@ -66,7 +71,7 @@ class UsersTableComponent extends Component {
             },
             {
                 Header: "Delete",
-                accessor: "userId",
+                accessor: "productId",
                 filterable: false,
                 Cell: row => {
                     return (
@@ -74,7 +79,7 @@ class UsersTableComponent extends Component {
                             <button
                                 className="btn btn-danger"
                                 onClick={() => {
-                                    this.deleteUser(row.value)
+                                    this.deleteProduct(row.value)
                                 }
                                 }
                             >
@@ -88,14 +93,14 @@ class UsersTableComponent extends Component {
         return (
             <div className="col-sm-12 table-container table-wrapper">
                 <nav className="button-wrapper">
-                    <Link to={`${adminPanelUsers}/form/new`} className="btn btn-primary">
-                        Add new user
+                    <Link to={`${adminPanelProducts}/form/new`} className="btn btn-primary">
+                        Add new product
                     </Link>
                 </nav>
-                <h1>Users</h1>
+                <h1>Products</h1>
                 <hr />
                 <ReactTable
-                    data={users}
+                    data={products}
                     columns={columns}
                     filterable
                     defaultFilterMethod={(filter, row) => {
@@ -109,18 +114,16 @@ class UsersTableComponent extends Component {
                 />
                 <Modal bsSize="large" show={this.state.showModal} onHide={this.closeModal.bind(this)}>
                     <Modal.Body>
-                        <h4>Do you want to delete this user?</h4>
+                        <h4>Do you want to delete this product?</h4>
                     </Modal.Body>
                     <Modal.Footer>
-                        <Button bsStyle="primary" onClick={this.confirmDeleteUser.bind(this)}>Yes</Button>
+                        <Button bsStyle="primary" onClick={this.confirmDeleteProduct.bind(this)}>Yes</Button>
                         <Button onClick={this.closeModal.bind(this)}>No</Button>
                     </Modal.Footer>
                 </Modal>
             </div>
         )
     }
-
-
     closeModal() {
         this.setState({
             ...this.state,
@@ -128,34 +131,36 @@ class UsersTableComponent extends Component {
         });
     }
 
-    deleteUser(userId) {
+    deleteProduct(id) {
         this.setState({
             ...this.state,
-            userIdToDelete: userId,
+            productIdToDelete: id,
             showModal: true
         });
     }
 
-    confirmDeleteUser() {
-        this.props.deleteUser(this.state.userIdToDelete);
+    confirmDeleteProduct() {
+        this.props.deleteProduct(this.state.productIdToDelete);
 
         this.setState({
             ...this.state,
-            userIdToDelete: "",
+            productIdToDelete: "",
             showModal: false
         })
     }
 
-    editUser(userId) {
-        this.props.getUser(userId)
-        this.props.push(`${adminPanelUsers}/form/${userId}`)
+    editProduct(id) {
+        this.props.getProduct(id)
+        this.props.push(`${adminPanelProducts}/form/${id}`)
     }
+
+
 }
 
 function mapStateToProps(state) {
     return {
-        users: state.users.usersList.users
+        products: state.products.productsList.products
     }
 }
 
-export const UsersTable = connect(mapStateToProps, { getAllUsers, push, deleteUser, getUser })(UsersTableComponent)
+export const ProductsTable = connect(mapStateToProps, { getAllProducts, deleteProduct, getProduct, push })(ProductsTableComponent) 

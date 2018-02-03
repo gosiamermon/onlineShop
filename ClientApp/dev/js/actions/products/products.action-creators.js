@@ -1,18 +1,18 @@
 
 import { API_URL } from '../../../config'
-import { USERS_FETCHED, USER_FETCHED } from './users.action-types'
+import { PRODUCTS_FETCHED, PRODUCT_FETCHED } from './products.action-types'
 import { push } from "connected-react-router";
-import { adminPanelUsers } from "../../helpers/routes"
+import { adminPanelProducts } from "../../helpers/routes"
 
 
-export const getAllUsers = () => {
+export const getAllProducts = () => {
     return async (dispatch) => {
 
         let response;
         //let headers = new Headers();
         //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
-            response = await fetch(`${API_URL}users`, {
+            response = await fetch(`${API_URL}products`, {
                 mode: "cors",
                 method: "get"
             });
@@ -21,33 +21,25 @@ export const getAllUsers = () => {
             console.log("Data fetching failed", error)
             return;
         }
-        const usersData = await response.json()
-        const users = usersData.map(user => {
-            if (user.isAdmin) {
-                user.role = "admin"
-            }
-            else {
-                user.role = "client"
-            }
-            return user
-        })
-        console.log(users)
+        const products = await response.json()
+
         dispatch({
-            type: USERS_FETCHED,
+            type: PRODUCTS_FETCHED,
             payload: {
-                users
+                products
             }
         })
     }
 }
 
-export const getUser = (id) => {
+
+export const getProduct = (id) => {
     return async (dispatch) => {
         let response;
         //let headers = new Headers();
         //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
-            response = await fetch(`${API_URL}users/${id}`, {
+            response = await fetch(`${API_URL}products/${id}`, {
                 mode: "cors",
                 method: "get"
             });
@@ -56,81 +48,76 @@ export const getUser = (id) => {
             console.log("Data fetching failed", error)
             return;
         }
-        const userData = await response.json()
-        let user = userData
-        if (userData.isAdmin) {
-            user.role = "admin"
-        }
-        else {
-            user.role = "client"
-        }
+        const product = await response.json()
+
         dispatch({
-            type: USER_FETCHED,
-            payload: user
+            type: PRODUCT_FETCHED,
+            payload: product
         })
     }
 }
 
-export const deleteUser = (userId) => {
+export const deleteProduct = (id) => {
     return async (dispatch) => {
         let response;
 
         try {
-            response = await fetch(`${API_URL}users/${userId}`, {
+            response = await fetch(`${API_URL}products/${id}`, {
                 mode: "core",
                 method: "delete"
             })
         }
         catch (error) {
-            console.error("User delete failed", error)
+            console.error("Product delete failed", error)
             return;
         }
+
         if (response.ok) {
-            dispatch(getAllUsers())
+            dispatch(getAllProducts())
         }
     }
 }
 
-export const addUser = (user) => {
+export const addProduct = (product) => {
     return async (dispatch) => {
         let response;
         let headers = new Headers();
         headers.append("Content-type", "application/json");
 
         try {
-            response = await fetch(`${API_URL}users/registerAdmin`, {
+            response = await fetch(`${API_URL}products`, {
                 method: "post",
                 mode: "cors",
                 headers: headers,
-                body: JSON.stringify(user)
+                body: JSON.stringify(product)
             })
         }
         catch (error) {
-            console.error("User posting failed", error)
+            console.error("Product posting failed", error)
             return;
         }
-        dispatch(push(adminPanelUsers))
+        dispatch(push(adminPanelProducts))
     }
 }
 
-export const editUser = (id, user) => {
+export const editProduct = (id, product) => {
     return async (dispatch) => {
         let response;
         let headers = new Headers();
         headers.append("Content-type", "application/json");
 
         try {
-            response = await fetch(`${API_URL}users/${id}`, {
+            response = await fetch(`${API_URL}products/${id}`, {
                 method: "put",
                 mode: "cors",
                 headers: headers,
-                body: JSON.stringify(user)
+                body: JSON.stringify(product)
             })
         }
         catch (error) {
-            console.error("User editing failed", error)
+            console.error("Product editing failed", error)
             return;
         }
-        dispatch(push(adminPanelUsers))
+        dispatch(push(adminPanelProducts))
     }
 }

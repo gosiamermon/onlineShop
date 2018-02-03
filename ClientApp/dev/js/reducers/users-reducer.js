@@ -1,8 +1,9 @@
-import { USERS_FETCHED, USERS_FETCH_STARTED, USERS_FETCH_FAILED } from '../actions/users/users.action-types'
+import { USERS_FETCHED, USER_FETCHED } from '../actions/users/users.action-types'
 
 
 const initialUsersState = {
-    usersList: { users: [], error: null }
+    usersList: { users: [], error: null },
+    user: null
 }
 
 const UsersReducer = (state = initialUsersState, action) => {
@@ -13,10 +14,10 @@ const UsersReducer = (state = initialUsersState, action) => {
                 ...state,
                 usersList: { users: action.payload.users, error: null }
             }
-        case USERS_FETCH_STARTED:
+        case USER_FETCHED:
             return {
                 ...state,
-                usersList: { ...state.usersList }
+                user: action.payload
             }
     }
     return state;

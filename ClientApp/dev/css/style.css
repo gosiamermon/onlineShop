@@ -168,3 +168,32 @@
 .modal.fade .modal-dialog{
     top: 37%;
 }
+
+.form-wrapper{
+    margin: 50px;
+}
+
+.form-title{
+    margin-top: 5%;
+}
+
+.products-header-wrapper{
+    margin: 30px;
+}
+
+.products-form-title{
+    margin-top: 20px;
+}
+
+.products-container{
+    margin: 50px;
+}
+
+.file-upload-wrapper{
+    margin-top: 48px;
+}
+
+.image-button-wrapper{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
