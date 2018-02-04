@@ -101,9 +101,38 @@ namespace OnlineShop.DAL
             producerCropp.Products.Add(p2);
             producerCropp.Products.Add(p22);
 
+            Order order = new Order {
+                OrderDate = DateTime.Now,
+                IsAccepted = false,
+                IsPaid = false,
+                TotalValue = 0,
+                User = user,
+                OrderItems = new List<OrderItem>()
+            };
+
+            OrderItem oi1 = new OrderItem {
+                ProductAmount = 1,
+                Product = p1,
+                Order = order
+            };
+            oi1.Subtotal = oi1.Product.Cost * oi1.ProductAmount;
+            oi1.Product.ItemNumber = oi1.Product.ItemNumber - oi1.ProductAmount;
+
+            OrderItem oi2 = new OrderItem {
+                ProductAmount = 2,
+                Product = p2,
+                Order = order
+            };
+            oi2.Subtotal = oi2.Product.Cost * oi2.ProductAmount;
+            oi2.Product.ItemNumber = oi2.Product.ItemNumber - oi2.ProductAmount;
+
+            order.OrderItems.Add(oi1);
+            order.OrderItems.Add(oi2);
+            order.TotalValue = oi1.Subtotal + oi2.Subtotal;
+
             context.Categories.AddRange(categoryTshirts, categoryPulover);
             context.Producers.AddRange(producerHm, producerCropp);
-
+            context.Orders.Add(order);
             context.SaveChangesAsync();
             //}
         }
