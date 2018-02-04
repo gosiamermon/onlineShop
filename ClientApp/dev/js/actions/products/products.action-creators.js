@@ -1,6 +1,6 @@
 
 import { API_URL } from '../../../config'
-import { PRODUCTS_FETCHED, PRODUCT_FETCHED } from './products.action-types'
+import { PRODUCTS_FETCHED, PRODUCT_FETCHED, PRODUCTS_SMALL_PHOTO, PRODUCTS_BIG_PHOTO } from './products.action-types'
 import { push } from "connected-react-router";
 import { adminPanelProducts } from "../../helpers/routes"
 
@@ -119,5 +119,29 @@ export const editProduct = (id, product) => {
             return;
         }
         dispatch(push(adminPanelProducts))
+    }
+}
+
+export const uploadSmallPhoto = (photoFile, wasRemoved = false) => {
+    return (dispatch) => {
+        dispatch({
+            type: PRODUCTS_SMALL_PHOTO,
+            payload: {
+                photo: photoFile,
+                wasRemoved: wasRemoved
+            }
+        })
+    }
+}
+
+export const uploadBigPhoto = (photoFile, wasRemoved = false) => {
+    return (dispatch) => {
+        dispatch({
+            type: PRODUCTS_BIG_PHOTO,
+            payload: {
+                photo: photoFile,
+                wasRemoved: wasRemoved
+            }
+        })
     }
 }

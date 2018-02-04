@@ -13,23 +13,21 @@ import { compose } from "redux";
 import { Link } from "react-router-dom";
 import { adminPanelProducts } from "../../../helpers/routes";
 import { FormGroup, Button } from "react-bootstrap";
-import { addProduct, editProduct } from "../../../actions/products/products.action-creators"
+import { addProduct, editProduct, uploadSmallPhoto, uploadBigPhoto } from "../../../actions/products/products.action-creators"
 import { productCategory, productSubcategory, productFabric, productGender, productSize } from "../../../helpers/productCategories";
 
 const newMode = "new";
 const editMode = "edit";
-let smallImgFile = "";
-let bigImgFile = "";
+
 class ProductsFormComponent extends Component {
     constructor(props) {
         super(props)
-
-        this.state = {
-            smallImgFile: "",
-            bigImgFile: ""
-        }
     }
 
+    componentDidMount() {
+        this.props.uploadBigPhoto("")
+        this.props.uploadSmallPhoto("")
+    }
 
     getSmallPhoto(e) {
         e.preventDefault();
@@ -38,10 +36,7 @@ class ProductsFormComponent extends Component {
         let file = e.target.files[0];
 
         reader.onloadend = () => {
-            smallImgFile = reader.result
-            this.setState({
-                smallImgFile: smallImgFile
-            })
+            this.props.uploadSmallPhoto(reader.result)
         }
         reader.readAsDataURL(file);
     }
@@ -53,10 +48,7 @@ class ProductsFormComponent extends Component {
         let file = e.target.files[0];
 
         reader.onloadend = () => {
-            bigImgFile = reader.result
-            this.setState({
-                bigImgFile: bigImgFile
-            })
+            this.props.uploadBigPhoto(reader.result)
         }
         reader.readAsDataURL(file);
     }
@@ -64,18 +56,7 @@ class ProductsFormComponent extends Component {
 
 
     render() {
-        const { handleSubmit, formMode, initialValues } = this.props
-        const showBigImg = this.state.bigImgFile || (initialValues && initialValues.imageBig) ? true : false;
-        const showSmallImg = this.state.smallImgFile || (initialValues && initialValues.imageSmall) ? true : false;
-        let smallImgFile
-        let bigImgFile
-
-        if (showSmallImg) {
-            smallImgFile = this.state.smallImgFile ? this.state.smallImgFile : initialValues.imageSmall;
-        }
-        if (showBigImg) {
-            bigImgFile = this.state.bigImgFile ? this.state.bigImgFile : initialValues.imageBig;
-        }
+        const { handleSubmit, formMode } = this.props
 
         return (
             <div className="products-container">
@@ -185,37 +166,37 @@ class ProductsFormComponent extends Component {
                         </Form>
                     </div>
                     <div className="col-lg-5 file-upload-wrapper">
-                        {!showSmallImg &&
+                        {!this.props.smallPhoto &&
                             <div className="form-group">
                                 <label>Small image *</label>
                                 <input onChange={(event) => { this.getSmallPhoto(event) }} id="sm" className="form-control" type="file"></input>
                             </div>
                         }
                         {
-                            showSmallImg &&
+                            this.props.smallPhoto &&
                             <div className="col">
                                 <div className="image-button-wrapper">
                                     <button onClick={() => { this.clearSmallPhoto() }} className="btn btn-primary">Change image</button>
                                 </div>
                                 <div>
-                                    <img className="img-thumbnail" src={smallImgFile} />
+                                    <img className="img-thumbnail" src={this.props.smallPhoto} />
                                 </div>
                             </div>
                         }
                         {
-                            !showBigImg &&
+                            !this.props.bigPhoto &&
                             <div className="form-group">
                                 <label>Big image *</label>
                                 <input onChange={(event) => { this.getBigPhoto(event) }} id="big" className="form-control" type="file"></input>
                             </div>
                         }
                         {
-                            showBigImg &&
+                            this.props.bigPhoto &&
                             <div className="col">
                                 <div className="image-button-wrapper">
                                     <button onClick={() => { this.clearBigPhoto() }} className="btn btn-primary">Change image</button>
                                 </div>
-                                <img className="img-thumbnail" src={bigImgFile} />
+                                <img className="img-thumbnail" src={this.props.bigPhoto} />
                             </div>
                         }
                     </div>
@@ -225,18 +206,11 @@ class ProductsFormComponent extends Component {
     }
 
     clearSmallPhoto() {
-        this.setState({
-            smallImgFile: ""
-        })
-        smallImgFile = ""
-
+        this.props.uploadSmallPhoto("", true)
     }
 
     clearBigPhoto() {
-        this.setState({
-            bigImgFile: ""
-        })
-        bigImgFile = ""
+        this.props.uploadBigPhoto("", true)
     }
 
     getProductFormTitle(formMode) {
@@ -252,14 +226,24 @@ class ProductsFormComponent extends Component {
 function mapStateToProps(state, ownProps) {
     const id = ownProps.match.params.formMode
     const initialValues = null
+    let smallPhoto = ""
+    let bigPhoto = ""
+    if (state.products.smallPhoto.photo) {
+        smallPhoto = state.products.smallPhoto.photo
+    }
+    if (state.products.bigPhoto.photo) {
+        bigPhoto = state.products.bigPhoto.photo
+    }
 
     if (!id) {
         return {
             initialValues,
+            smallPhoto: smallPhoto,
+            bigPhoto: bigPhoto,
             formMode: newMode,
             onSubmit: async (values, dispatch) => {
                 try {
-                    dispatch(addProduct(mapFormValuesToStoreModel(values, newMode)))
+                    dispatch(addProduct(mapFormValuesToStoreModel(values, smallPhoto, bigPhoto)))
                 }
                 catch (err) {
                     console.log(err)
@@ -270,12 +254,20 @@ function mapStateToProps(state, ownProps) {
 
     const selectedProduct = state.products.product
 
+    if (selectedProduct && !smallPhoto && !state.products.smallPhoto.wasRemoved) {
+        smallPhoto = selectedProduct.imageSmall
+    }
+    if (selectedProduct && !bigPhoto && !state.products.bigPhoto.wasRemoved) {
+        bigPhoto = selectedProduct.imageBig
+    }
     return {
         initialValues: selectedProduct,
+        smallPhoto: smallPhoto,
+        bigPhoto: bigPhoto,
         formMode: editMode,
         onSubmit: async (values, dispatch) => {
             try {
-                dispatch(editProduct(selectedProduct.productId, mapFormValuesToStoreModel(values, editMode)))
+                dispatch(editProduct(selectedProduct.productId, mapFormValuesToStoreModel(values, smallPhoto, bigPhoto)))
             }
             catch (err) {
                 console.log(err)
@@ -284,7 +276,7 @@ function mapStateToProps(state, ownProps) {
     }
 }
 
-function mapFormValuesToStoreModel(formValues, mode) {
+function mapFormValuesToStoreModel(formValues, smallPhoto, bigPhoto) {
     let product = {
         name: formValues.name,
         category: formValues.category,
@@ -298,14 +290,15 @@ function mapFormValuesToStoreModel(formValues, mode) {
         producer: formValues.producer,
         size: formValues.size
     }
-    product.imageSmall = smallImgFile
-    product.imageBig = bigImgFile
+    product.imageSmall = smallPhoto
+    product.imageBig = bigPhoto
+
     return product;
 }
 
 export const ProductsForm = compose(
     withRouter,
-    connect(mapStateToProps, null),
+    connect(mapStateToProps, { uploadSmallPhoto, uploadBigPhoto }),
     reduxForm({
         form: "products-form",
         enableReinitialize: true
