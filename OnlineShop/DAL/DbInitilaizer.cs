@@ -13,7 +13,7 @@ namespace OnlineShop.DAL
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
-            if(!context.Products.Any()) {
+            //if(!context.Products.Any()) {
             byte[] passwordHash, passwordSalt;
             HashHelper.CreatePasswordHash("test", out passwordHash, out passwordSalt);
             var user = new User
@@ -28,8 +28,8 @@ namespace OnlineShop.DAL
             };
             context.Add(user);
 
-            Category categoryTshirts = new Category { Name = "Koszulki" };
-            Category categoryPulover = new Category { Name = "Swetry" };
+            Category categoryTshirts = new Category { Name = "T-Shirt" };
+            Category categoryPulover = new Category { Name = "Pullover" };
             Producer producerHm = new Producer { Name = "H&M" };
             Producer producerCropp = new Producer { Name = "Cropp" };
             Product p1 = new Product
@@ -42,7 +42,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Bawełna",
-                Gender = "K",
+                Gender = "Female",
                 IsAvaiable = true,
                 ItemNumber = 10
             };
@@ -56,7 +56,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Bawełna",
-                Gender = "K",
+                Gender = "Female",
                 IsAvaiable = true,
                 ItemNumber = 10
             };
@@ -76,7 +76,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Wełna",
-                Gender = "M",
+                Gender = "Male",
                 IsAvaiable = true,
                 ItemNumber = 10
             };
@@ -90,7 +90,7 @@ namespace OnlineShop.DAL
                 Color = "Red",
                 Size = "M",
                 Fabric = "Wełna",
-                Gender = "M",
+                Gender = "Male",
                 IsAvaiable = true,
                 ItemNumber = 10
             };
@@ -104,6 +104,7 @@ namespace OnlineShop.DAL
             Order order = new Order {
                 OrderDate = DateTime.Now,
                 IsAccepted = false,
+                status = "Sent",
                 IsPaid = false,
                 TotalValue = 0,
                 User = user,
@@ -134,7 +135,7 @@ namespace OnlineShop.DAL
             context.Producers.AddRange(producerHm, producerCropp);
             context.Orders.Add(order);
             context.SaveChangesAsync();
-            }
+            //}
         }
 
     }

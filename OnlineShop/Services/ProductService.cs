@@ -33,6 +33,7 @@ namespace OnlineShop.Service
         {
             UpadteOrCreateCategory(product, product.Category.Name);
             UpdateOrCreatProducer(product, product.Producer.Name);
+            _context.Products.Add(product);
             _context.SaveChangesAsync();
             return product;
         }

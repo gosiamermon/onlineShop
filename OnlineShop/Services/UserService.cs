@@ -51,13 +51,12 @@ public interface IUserService
 
         public IEnumerable<User> GetAll()
         {
-            return _context.Users.Include(u => u.Address);
+            return _context.Users;
         }
 
         public User GetById(int id)
         {
             return _context.Users
-            .Include(u => u.Address)
             .SingleOrDefault(u => u.UserId == id);
         }
 

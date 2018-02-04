@@ -11,7 +11,7 @@ using OnlineShop.Service;
 
 namespace OnlineShop
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class OrderController : Controller
     {
@@ -96,6 +96,21 @@ namespace OnlineShop
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("ChangeStatus")]
+        public IActionResult SubmitOrder([FromBody] ChangeStatusDto changeStatusDto)
+        {
+            try
+            {
+                _orderService.ChangeStatus(changeStatusDto.OrderId, changeStatusDto.Status);
+                return Ok();
+            } 
+            catch(AppException ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpGet]
         public IActionResult GetAll()

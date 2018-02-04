@@ -20,6 +20,7 @@ namespace OnlineShop.Service
         IEnumerable<Order> GetOrdersReletedByUser(int userId);
         Order GetOrderById(int oredrId);
         void PayOrder(int orderId);
+        void ChangeStatus (int id, string status);
     }
 
     public class OrderService : IOrderService
@@ -236,12 +237,21 @@ namespace OnlineShop.Service
             return order;
         }
 
+        public void ChangeStatus(int id, string status)
+        {
+            Order order = GetOrder(id);
+            order.status = status;
+            _context.Orders.Update(order);
+            _context.SaveChangesAsync();
+        }
+
         public void SubmitOrder(int orderId)
         {
             Order order = GetOrder(orderId);
             if(order.IsAccepted)
                 throw new AppException("Order already accepted"); 
             order.IsAccepted = true;
+            order.status = "Accepted";
             order.AcceptedDate = DateTime.Now;
             _context.Orders.Update(order);
             _context.SaveChangesAsync();

@@ -1,11 +1,15 @@
 var path = require('path');
 var webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
     devServer: {
         inline: true,
         contentBase: './src',
-        port: 3000
+        port: 3000,
+        historyApiFallback: {
+            disableDotRule: false,
+        },
     },
     devtool: 'cheap-module-eval-source-map',
     entry: './dev/js/index.js',
@@ -13,12 +17,16 @@ module.exports = {
         loaders: [
             {
                 test: /\.js$/,
-                loaders: ['babel'],
+                loader: 'babel-loader',
                 exclude: /node_modules/
             },
             {
-                test: /\.scss/,
-                loader: 'style-loader!css-loader!sass-loader'
+                test: /\.css$/,
+                loaders: ["style-loader", "css-loader"]
+            },
+            {
+                test: /\.(ttf|otf|eot|svg|gif|woff2?)(\?.+)?$/,
+                loader: 'url-loader?name=[name].[ext]',
             }
         ]
     },
