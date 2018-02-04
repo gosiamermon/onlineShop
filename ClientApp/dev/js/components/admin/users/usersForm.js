@@ -10,13 +10,19 @@ import { compose } from "redux";
 import { Link } from "react-router-dom";
 import { adminPanelUsers } from "../../../helpers/routes";
 import { FormGroup, Button } from "react-bootstrap";
-import { addUser, editUser } from "../../../actions/users/users.action-creators"
+import { addUser, editUser, getUser } from "../../../actions/users/users.action-creators"
 
 const newMode = "new";
 const editMode = "edit";
 class UsersFormComponent extends Component {
     constructor(props) {
         super(props)
+    }
+
+    componentDidMount() {
+        if (this.props.userId) {
+            this.props.getUser(this.props.userId)
+        }
     }
 
     render() {
@@ -124,6 +130,7 @@ function mapStateToProps(state, ownProps) {
     const selectedUser = state.users.user
 
     return {
+        userId: id,
         initialValues: selectedUser,
         formMode: editMode,
         onSubmit: async (values, dispatch) => {
@@ -159,7 +166,7 @@ function mapFormValuesToStoreModel(formValues, mode) {
 
 export const UsersForm = compose(
     withRouter,
-    connect(mapStateToProps, null),
+    connect(mapStateToProps, { getUser }),
     reduxForm({
         form: "users-form",
         enableReinitialize: true

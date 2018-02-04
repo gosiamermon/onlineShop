@@ -14,5 +14,6 @@ namespace OnlineShop.DTO
         public double TotalValue { get; set; }
         public bool IsPaid { get; set; }
         public DateTime PaymentDate { get; set; }
+        public string status {get; set;}
     }
 }

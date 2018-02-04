@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { PublicRoute } from 'react-router-with-props';
 import { adminPanelOrders } from '../../../helpers/routes'
 import { OrdersTable } from './ordersTable'
-import { OrdersForm } from './ordersForm'
+import { OrderDetails } from './orderDetails'
 
 export class Orders extends Component {
     constructor(props) {
@@ -15,8 +15,7 @@ export class Orders extends Component {
         return (
             <div className="row">
                 <Switch>
-                    <PublicRoute path={`${adminPanelOrders}/form/new`} component={OrdersForm} />
-                    <PublicRoute path={`${adminPanelOrders}/form/:formMode/:id?`} component={OrdersForm} />
+                    <PublicRoute path={`${adminPanelOrders}/details/:id?`} component={OrderDetails} />
                     <PublicRoute path={adminPanelOrders} component={OrdersTable} />
                 </Switch>
             </div>

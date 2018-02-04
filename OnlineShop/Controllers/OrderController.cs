@@ -97,6 +97,21 @@ namespace OnlineShop
             }
         }
 
+        [HttpPut("ChangeStatus")]
+        public IActionResult SubmitOrder([FromBody] ChangeStatusDto changeStatusDto)
+        {
+            try
+            {
+                _orderService.ChangeStatus(changeStatusDto.OrderId, changeStatusDto.Status);
+                return Ok();
+            } 
+            catch(AppException ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
         [HttpGet]
         public IActionResult GetAll()
         {

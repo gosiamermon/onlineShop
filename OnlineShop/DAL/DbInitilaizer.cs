@@ -104,6 +104,7 @@ namespace OnlineShop.DAL
             Order order = new Order {
                 OrderDate = DateTime.Now,
                 IsAccepted = false,
+                status = "Sent",
                 IsPaid = false,
                 TotalValue = 0,
                 User = user,

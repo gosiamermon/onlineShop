@@ -197,3 +197,16 @@
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
+.orders-title{
+    margin-top: 50px;
+}
+
+.order-label{
+    font-weight: bold;
+}
+
+.order-items-container{
+    margin-right: 30px;
+    margin-left: 30px;
+}

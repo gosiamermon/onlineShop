@@ -13,7 +13,7 @@ import { compose } from "redux";
 import { Link } from "react-router-dom";
 import { adminPanelProducts } from "../../../helpers/routes";
 import { FormGroup, Button } from "react-bootstrap";
-import { addProduct, editProduct, uploadSmallPhoto, uploadBigPhoto } from "../../../actions/products/products.action-creators"
+import { addProduct, editProduct, uploadSmallPhoto, uploadBigPhoto, getProduct } from "../../../actions/products/products.action-creators"
 import { productCategory, productSubcategory, productFabric, productGender, productSize } from "../../../helpers/productCategories";
 
 const newMode = "new";
@@ -25,6 +25,9 @@ class ProductsFormComponent extends Component {
     }
 
     componentDidMount() {
+        if (this.props.productId) {
+            this.props.getProduct(this.props.productId)
+        }
         this.props.uploadBigPhoto("")
         this.props.uploadSmallPhoto("")
     }
@@ -225,6 +228,7 @@ class ProductsFormComponent extends Component {
 
 function mapStateToProps(state, ownProps) {
     const id = ownProps.match.params.formMode
+
     const initialValues = null
     let smallPhoto = ""
     let bigPhoto = ""
@@ -261,6 +265,7 @@ function mapStateToProps(state, ownProps) {
         bigPhoto = selectedProduct.imageBig
     }
     return {
+        productId: id,
         initialValues: selectedProduct,
         smallPhoto: smallPhoto,
         bigPhoto: bigPhoto,
@@ -298,7 +303,7 @@ function mapFormValuesToStoreModel(formValues, smallPhoto, bigPhoto) {
 
 export const ProductsForm = compose(
     withRouter,
-    connect(mapStateToProps, { uploadSmallPhoto, uploadBigPhoto }),
+    connect(mapStateToProps, { uploadSmallPhoto, uploadBigPhoto, getProduct }),
     reduxForm({
         form: "products-form",
         enableReinitialize: true
