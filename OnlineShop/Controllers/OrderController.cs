@@ -11,7 +11,7 @@ using OnlineShop.Service;
 
 namespace OnlineShop
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class OrderController : Controller
     {
