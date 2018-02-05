@@ -57,7 +57,8 @@ namespace OnlineShop.Service
                 TotalValue = orderItem.Subtotal,
                 OrderItems = items,
                 User = user,
-                UserId = user.UserId
+                UserId = user.UserId,
+                Status = ""
             };
             if (product.OrderItems == null)
                 product.OrderItems = new List<OrderItem>();
@@ -240,7 +241,7 @@ namespace OnlineShop.Service
         public void ChangeStatus(int id, string status)
         {
             Order order = GetOrder(id);
-            order.status = status;
+            order.Status = status;
             _context.Orders.Update(order);
             _context.SaveChangesAsync();
         }
@@ -251,7 +252,7 @@ namespace OnlineShop.Service
             if(order.IsAccepted)
                 throw new AppException("Order already accepted"); 
             order.IsAccepted = true;
-            order.status = "Accepted";
+            order.Status = "Accepted";
             order.AcceptedDate = DateTime.Now;
             _context.Orders.Update(order);
             _context.SaveChangesAsync();

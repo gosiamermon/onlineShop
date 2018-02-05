@@ -16,7 +16,7 @@ namespace OnlineShop.Models
         public double TotalValue { get; set; }
         public bool IsPaid { get; set; }
         public DateTime PaymentDate { get; set; }
-        public string status {get; set;}
+        public string Status {get; set;}
 
         public int UserId { get; set; }
         public User User { get; set; }

@@ -9,7 +9,7 @@ using OnlineShop.Service;
 
 namespace OnlineShop
 {
-    //[Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class ProductsController : Controller
     {
@@ -67,6 +67,7 @@ namespace OnlineShop
             return Ok(productDto);
         }
 
+        [Authorize (Policy = "AdminOnly")]
         [HttpPost]
         public IActionResult Create([FromBody]ProductDto productDto)
         {
@@ -82,6 +83,7 @@ namespace OnlineShop
             }
         }
 
+        [Authorize (Policy = "AdminOnly")]
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody]ProductDto productDto)
         {
@@ -98,6 +100,7 @@ namespace OnlineShop
             }
         }
 
+        [Authorize (Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

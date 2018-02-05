@@ -17,6 +17,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using OnlineShop.Service;
+using System.Security.Claims;
 
 namespace OnlineShop
 {
@@ -63,6 +64,11 @@ namespace OnlineShop
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
+            });
+
+            services.AddAuthorization(x =>
+            {
+                x.AddPolicy("AdminOnly", policy => policy.RequireClaim(ClaimTypes.AuthorizationDecision, "true"));
             });
 
             // configure DI for application repositories

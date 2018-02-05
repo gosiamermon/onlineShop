@@ -27,6 +27,18 @@ namespace OnlineShop.DAL
                 Address = "44-100 Gliwice, Akademicka 13/2"
             };
             context.Add(user);
+            HashHelper.CreatePasswordHash("admin", out passwordHash, out passwordSalt);
+            var admin = new User
+            {
+                Email = "admin@shop.pl",
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                Name = "Jan",
+                Surname = "Kowalski",
+                IsAdmin = true,
+                Address = "44-100 Gliwice, Akademicka 13/2"
+            };
+            context.Add(admin);
 
             Category categoryTshirts = new Category { Name = "T-Shirt" };
             Category categoryPulover = new Category { Name = "Pullover" };
@@ -104,7 +116,7 @@ namespace OnlineShop.DAL
             Order order = new Order {
                 OrderDate = DateTime.Now,
                 IsAccepted = false,
-                status = "Sent",
+                Status = "Sent",
                 IsPaid = false,
                 TotalValue = 0,
                 User = user,
