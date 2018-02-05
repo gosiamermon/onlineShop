@@ -15,7 +15,7 @@ using OnlineShop.Models;
 
 namespace OnlineShop.Controllers
 {
-    // [Authorize]
+    [Authorize]
     [Route("[controller]")]
     public class UsersController : Controller
     {
@@ -54,13 +54,14 @@ namespace OnlineShop.Controllers
                 return BadRequest("Email or password is incorrect");
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+            var Expires = DateTime.UtcNow.AddHours(2);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[] 
                 {
                     new Claim(ClaimTypes.Name, user.UserId.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = Expires,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -71,7 +72,8 @@ namespace OnlineShop.Controllers
                 Name = user.Name,
                 Surname = user.Surname,
                 IsAdmin = user.IsAdmin,
-                Token = tokenString
+                Token = tokenString,
+                Expires = Expires
             });
         }
 

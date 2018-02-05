@@ -103,9 +103,9 @@ class UsersTableComponent extends Component {
                         let filterValue = filter.value.toLowerCase();
                         return rowValue.includes(filterValue);
                     }}
-                    defaultPageSize={15}
-                    pageSize={15}
-                    minRows={15}
+                    defaultPageSize={14}
+                    pageSize={14}
+                    minRows={14}
                 />
                 <Modal bsSize="large" show={this.state.showModal} onHide={this.closeModal.bind(this)}>
                     <Modal.Body>

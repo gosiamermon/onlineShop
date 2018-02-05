@@ -15,7 +15,7 @@ namespace OnlineShop.DAL
 
             //if(!context.Products.Any()) {
             byte[] passwordHash, passwordSalt;
-            HashHelper.CreatePasswordHash("test", out passwordHash, out passwordSalt);
+            HashHelper.CreatePasswordHash("dupofix12345", out passwordHash, out passwordSalt);
             var user = new User
             {
                 Email = "test@shop.pl",
@@ -28,7 +28,19 @@ namespace OnlineShop.DAL
             };
             context.Add(user);
 
-            Category categoryTshirts = new Category { Name = "T-Shirt" };
+            var adminUser = new User
+            {
+                Email = "nowak@yourwardrobe.pl",
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt,
+                Name = "Jan",
+                Surname = "Nowak",
+                IsAdmin = true,
+                Address = "44-100 Gliwice, Zygmunta Starego 13/2"
+            };
+            context.Add(adminUser);
+
+            Category categoryTshirts = new Category { Name = "Shirt" };
             Category categoryPulover = new Category { Name = "Pullover" };
             Producer producerHm = new Producer { Name = "H&M" };
             Producer producerCropp = new Producer { Name = "Cropp" };

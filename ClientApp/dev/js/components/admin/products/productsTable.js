@@ -108,9 +108,9 @@ class ProductsTableComponent extends Component {
                         let filterValue = filter.value.toLowerCase();
                         return rowValue.includes(filterValue);
                     }}
-                    defaultPageSize={15}
-                    pageSize={15}
-                    minRows={15}
+                    defaultPageSize={13}
+                    pageSize={13}
+                    minRows={13}
                 />
                 <Modal bsSize="large" show={this.state.showModal} onHide={this.closeModal.bind(this)}>
                     <Modal.Body>
