@@ -38,7 +38,7 @@ namespace OnlineShop.Controllers
         public IActionResult AuthenticateUser([FromBody]LoginDto loginDto)
         {
             var user = _userService.AuthenticateUser(loginDto.Email, loginDto.Password);
-            return Authenticate(user);
+           return Authenticate(user);
         }
 
         [AllowAnonymous]
@@ -59,7 +59,8 @@ namespace OnlineShop.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[] 
                 {
-                    new Claim(ClaimTypes.Name, user.UserId.ToString())
+                    new Claim(ClaimTypes.Name, user.UserId.ToString()),
+                    new Claim(ClaimTypes.AuthorizationDecision, TypeConverter.BoolToString(user.IsAdmin))
                 }),
                 Expires = Expires,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -109,6 +110,7 @@ namespace OnlineShop.Controllers
             }
         }
 
+        [Authorize (Policy = "AdminOnly")]
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -141,6 +143,7 @@ namespace OnlineShop.Controllers
             }
         }
 
+        [Authorize (Policy = "AdminOnly")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
