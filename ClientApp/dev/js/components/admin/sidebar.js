@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { main, adminPanelUsers, adminPanelProducts, adminPanelOrders } from "../helpers/routes"
+import { main, adminPanelUsers, adminPanelProducts, adminPanelOrders } from "../../helpers/routes"
 import { withRouter } from "react-router"
 import { connect } from "react-redux"
 
@@ -15,8 +15,8 @@ class Sidebar extends Component {
             <div id="sidebar-wrapper">
                 <ul className="sidebar-nav">
                     <li className="sidebar-brand">
-                        <a href="/">
-                            OnlineShop
+                        <a href="/panel">
+                            YourWardrobe
                         </a>
                     </li>
                     <li>

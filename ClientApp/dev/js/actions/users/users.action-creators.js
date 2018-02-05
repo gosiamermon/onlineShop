@@ -9,12 +9,13 @@ export const getAllUsers = () => {
     return async (dispatch) => {
 
         let response;
-        //let headers = new Headers();
-        //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}users`, {
                 mode: "cors",
-                method: "get"
+                method: "get",
+                headers: headers
             });
         }
         catch (error) {
@@ -44,12 +45,13 @@ export const getAllUsers = () => {
 export const getUser = (id) => {
     return async (dispatch) => {
         let response;
-        //let headers = new Headers();
-        //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}users/${id}`, {
                 mode: "cors",
-                method: "get"
+                method: "get",
+                headers: headers
             });
         }
         catch (error) {
@@ -74,11 +76,13 @@ export const getUser = (id) => {
 export const deleteUser = (userId) => {
     return async (dispatch) => {
         let response;
-
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}users/${userId}`, {
                 mode: "core",
-                method: "delete"
+                method: "delete",
+                headers: headers
             })
         }
         catch (error) {
@@ -96,7 +100,7 @@ export const addUser = (user) => {
         let response;
         let headers = new Headers();
         headers.append("Content-type", "application/json");
-
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}users/registerAdmin`, {
                 method: "post",
@@ -118,6 +122,7 @@ export const editUser = (id, user) => {
         let response;
         let headers = new Headers();
         headers.append("Content-type", "application/json");
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
 
         try {
             response = await fetch(`${API_URL}users/${id}`, {

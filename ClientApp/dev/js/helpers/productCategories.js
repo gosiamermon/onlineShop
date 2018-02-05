@@ -1,5 +1,5 @@
 export const footwear = ["Shoes", "Boots", "Slippers"]
-export const clothing = ["Jacket", "Trousers", "T-shirt", "Blouse", "Jeans", "Skirt", "Dress", "Pijamas", "Underwear", "Swimsuit", "Suit"]
+export const clothing = ["Jacket", "Trousers", "Shirt", "Blouse", "Jeans", "Skirt", "Dress", "Pijamas", "Underwear", "Swimsuit", "Suit"]
 export const accessories = ["Tie", "Wallet", "Scarf"]
 
 export const productCategory = footwear.concat(clothing.concat(accessories));

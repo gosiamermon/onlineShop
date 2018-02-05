@@ -9,12 +9,13 @@ export const getAllProducts = () => {
     return async (dispatch) => {
 
         let response;
-        //let headers = new Headers();
-        //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}products`, {
                 mode: "cors",
-                method: "get"
+                method: "get",
+                headers
             });
         }
         catch (error) {
@@ -36,12 +37,13 @@ export const getAllProducts = () => {
 export const getProduct = (id) => {
     return async (dispatch) => {
         let response;
-        //let headers = new Headers();
-        //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}products/${id}`, {
                 mode: "cors",
-                method: "get"
+                method: "get",
+                headers
             });
         }
         catch (error) {
@@ -60,11 +62,13 @@ export const getProduct = (id) => {
 export const deleteProduct = (id) => {
     return async (dispatch) => {
         let response;
-
+        let headers = new Headers()
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}products/${id}`, {
                 mode: "core",
-                method: "delete"
+                method: "delete",
+                headers: headers
             })
         }
         catch (error) {
@@ -83,6 +87,7 @@ export const addProduct = (product) => {
         let response;
         let headers = new Headers();
         headers.append("Content-type", "application/json");
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
 
         try {
             response = await fetch(`${API_URL}products`, {
@@ -105,7 +110,7 @@ export const editProduct = (id, product) => {
         let response;
         let headers = new Headers();
         headers.append("Content-type", "application/json");
-
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}products/${id}`, {
                 method: "put",

@@ -3,10 +3,11 @@ import { adminPanelUsers, adminPanelProducts, adminPanelOrders } from '../../hel
 import { connect } from "react-redux";
 import { Switch, Redirect } from 'react-router';
 import { PublicRoute } from 'react-router-with-props';
-import { SidebarComponent } from '../sidebar'
+import { SidebarComponent } from './sidebar'
 import { Users } from './users/users'
 import { Products } from './products/products'
 import { Orders } from './orders/orders'
+import { Topbar } from '../common/topbar'
 
 export class AdminPanel extends Component {
     constructor(props) {
@@ -17,6 +18,7 @@ export class AdminPanel extends Component {
             <div id="wrapper">
                 <SidebarComponent />
                 <div id="page-content-wrapper">
+                    <Topbar />
                     <div className="container-fluid">
                         <Switch>
                             <PublicRoute path={adminPanelUsers} component={Users} />
