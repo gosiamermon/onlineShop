@@ -79,6 +79,13 @@ namespace OnlineShop.DAL
                    .WithMany(p => p.Opinions)
                    .HasForeignKey(o => o.ProductId)
                    .HasPrincipalKey(p => p.ProductId);
+
+                modelBuilder.Entity<Product>()
+                   .HasOne(p => p.Category)
+                   .WithMany(c => c.Products)
+                   .HasForeignKey(p => p.CategoryId)
+                   .HasPrincipalKey(c => c.CategoryId); 
+
         }
     }
 }

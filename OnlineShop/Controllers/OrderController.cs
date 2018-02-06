@@ -29,7 +29,7 @@ namespace OnlineShop
         {
             try
             {
-                _orderService.Create(orderDto.UserId, orderDto.ProductId, orderDto.Amount);
+                _orderService.Create(orderDto.UserId, orderDto.ProductId, orderDto.Amount, orderDto.Size);
                 return Ok();
             } catch(AppException ex) 
             {
@@ -42,7 +42,7 @@ namespace OnlineShop
         {
             try
             {
-                _orderService.AddToBasket(orderDto.OrderId, orderDto.ProductId, orderDto.Amount);
+                _orderService.AddToBasket(orderDto.OrderId, orderDto.ProductId, orderDto.Amount, orderDto.Size);
                 return Ok();
             } catch(AppException ex) 
             {

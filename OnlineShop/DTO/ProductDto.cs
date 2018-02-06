@@ -14,7 +14,7 @@ namespace OnlineShop.DTO
         public string ImageBig { get; set; }
         public double Cost { get; set; }
         public string Color { get; set; }
-        public string Size { get; set; }
+        public List<string> Sizes { get; set; }
         public string Fabric { get; set; }
         public string Gender { get; set; }
         public bool IsAvaiable { get; set; }

@@ -11,5 +11,6 @@ namespace OnlineShop.DTO
         public string ProductName {get; set;}
         public int ProductAmount { get; set; }
         public double Subtotal {get; set;}
+        public string Size {get; set;}
     }
 }

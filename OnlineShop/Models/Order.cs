@@ -11,12 +11,10 @@ namespace OnlineShop.Models
     {
         public int OrderId { get; set; }
         public DateTime OrderDate { get; set; }
-        public bool IsAccepted { get; set; }
         public DateTime AcceptedDate { get; set; }
         public double TotalValue { get; set; }
-        public bool IsPaid { get; set; }
         public DateTime PaymentDate { get; set; }
-        public string Status {get; set;}
+        public OrderStatus Status {get; set;}
 
         public int UserId { get; set; }
         public User User { get; set; }

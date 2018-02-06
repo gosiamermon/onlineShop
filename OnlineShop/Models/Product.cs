@@ -15,7 +15,6 @@ namespace OnlineShop.Models
         public string ImageBig { get; set; }
         public double Cost { get; set; }
         public string Color { get; set; }
-        public string Size { get; set; }
         public string Fabric { get; set; }
         public string Gender { get; set; }
         public bool IsAvaiable { get; set; }
@@ -25,6 +24,7 @@ namespace OnlineShop.Models
         public Category Category { get; set; }
         public int ProducerId { get; set; }
         public Producer Producer { get; set; }
+        public string Sizes {get; set;}
 
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<Opinion> Opinions { get; set; }
