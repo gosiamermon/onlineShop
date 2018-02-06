@@ -1,9 +1,13 @@
-import { ORDERS_FETCHED, ORDER_FETCHED } from '../actions/orders/orders.action-types'
+import { ORDERS_FETCHED, ORDER_FETCHED, CURRENT_ORDERID_FETCHED } from '../actions/orders/orders.action-types'
 
 
 const initialOrdersState = {
     ordersList: { orders: [], error: null },
-    order: null
+    order: null,
+    currentOrder: {
+        currentOrderId: null,
+        itemsCount: 0
+    }
 }
 
 const OrdersReducer = (state = initialOrdersState, action) => {
@@ -18,6 +22,11 @@ const OrdersReducer = (state = initialOrdersState, action) => {
             return {
                 ...state,
                 order: action.payload
+            }
+        case CURRENT_ORDERID_FETCHED:
+            return {
+                ...state,
+                currentOrder: action.payload
             }
     }
     return state;

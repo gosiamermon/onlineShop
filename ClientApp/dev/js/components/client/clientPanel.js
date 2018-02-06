@@ -13,7 +13,6 @@ export class ClientPanel extends Component {
         super(props)
     }
     render() {
-        console.log('test')
         const { isClientPanel } = this.props
         return (
             <div>

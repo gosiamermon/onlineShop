@@ -5,6 +5,7 @@ import { required, number } from "../../../helpers/form-helpers/validators";
 import { Form, reduxForm, Field } from "redux-form";
 import { renderSelect } from "../../../helpers/form-helpers/select"
 import { renderField } from "../../../helpers/form-helpers/field"
+import { renderMultiselect } from "../../../helpers/form-helpers/multiselect"
 import { renderRadio } from "../../../helpers/form-helpers/radio"
 import { renderFile } from "../../../helpers/form-helpers/file"
 import { renderTextArea } from "../../../helpers/form-helpers/textarea"
@@ -107,12 +108,12 @@ class ProductsFormComponent extends Component {
                                 }}
                                 validate={[required]} />
                             <Field
-                                name="size"
+                                name="sizes"
                                 type="text"
                                 required
-                                component={renderSelect}
+                                component={renderMultiselect}
                                 props={{
-                                    label: "Size",
+                                    label: "Sizes",
                                     data: productSize
                                 }}
                                 validate={[required]} />
@@ -293,7 +294,7 @@ function mapFormValuesToStoreModel(formValues, smallPhoto, bigPhoto) {
         itemNumber: formValues.itemNumber,
         isAvailable: formValues.itemNumber !== 0,
         producer: formValues.producer,
-        size: formValues.size
+        sizes: formValues.sizes
     }
     product.imageSmall = smallPhoto
     product.imageBig = bigPhoto

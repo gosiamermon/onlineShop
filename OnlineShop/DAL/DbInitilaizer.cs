@@ -10,12 +10,12 @@ namespace OnlineShop.DAL
     {
         public static void Initialize(ShopContext context)
         {
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+             //context.Database.EnsureDeleted();
+             context.Database.EnsureCreated();
 
-            //if(!context.Products.Any()) {
+           if(!context.Products.Any()) {
             byte[] passwordHash, passwordSalt;
-            HashHelper.CreatePasswordHash("dupofix12345", out passwordHash, out passwordSalt);
+            HashHelper.CreatePasswordHash("blablabla", out passwordHash, out passwordSalt);
             var user = new User
             {
                 Email = "test@shop.pl",
@@ -157,7 +157,7 @@ namespace OnlineShop.DAL
             context.Producers.AddRange(producerHm, producerCropp);
             context.Orders.Add(order);
             context.SaveChangesAsync();
-            //}
+            }
         }
 
     }

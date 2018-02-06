@@ -34,7 +34,8 @@ export const logIn = (formValues) => {
                     accessToken: responseData.token,
                     expireDate: new Date(responseData.expires),
                     userEmail: responseData.email,
-                    isAdmin: responseData.isAdmin
+                    isAdmin: responseData.isAdmin,
+                    userId: responseData.userId
 
                 }
             })
@@ -64,4 +65,5 @@ function addToSessionsStorage(responseData, expire_date) {
     sessionStorage.setItem("user_email", responseData.email);
     sessionStorage.setItem("isAdmin", responseData.isAdmin);
     sessionStorage.setItem("expire_date", responseData.expires)
+    sessionStorage.setItem("userId", responseData.userId)
 }

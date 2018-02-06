@@ -39,6 +39,9 @@ namespace OnlineShop.Helpers
             CreateMap<Order, OrderObjDto>()
             .ForMember(od => od.Status, m => m.MapFrom(
                 o => Enum.GetName(typeof(OrderStatus), o.Status)
+            ))
+            .ForMember(od => od.OrderItemsCount, m => m.MapFrom(
+                o => o.OrderItems.Count
             ));
             CreateMap<OrderObjDto, Order>();
             CreateMap<Order, OrderDetailsDto>()
