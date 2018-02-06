@@ -109,7 +109,7 @@ namespace OnlineShop.Service
             product.ImageBig = productParam.ImageBig;  
             product.Cost = productParam.Cost;
             product.Color = productParam.Color;
-            product.Size = productParam.Size;
+            product.Sizes = productParam.Sizes;
             product.Fabric = productParam.Fabric;
             product.Gender = productParam.Gender;
             product.IsAvaiable = productParam.IsAvaiable;

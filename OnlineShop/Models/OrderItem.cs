@@ -10,7 +10,7 @@ namespace OnlineShop.Models
         public int OrderItemId { get; set; }
         public int ProductAmount { get; set; }
         public double Subtotal {get; set;}
- 
+        public string Size { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }
 

@@ -10,8 +10,8 @@ namespace OnlineShop.Service
 {
     public interface IOrderService
     {
-        Order Create(int userId, int productId, int amount);
-        Order AddToBasket(int orderId, int productId, int amount);
+        Order Create(int userId, int productId, int amount, string size);
+        Order AddToBasket(int orderId, int productId, int amount, string size);
         Order RemoveFromBasket(int orderId, int productId);
         Order ChangeAmount(int orderId, int productId, int amount);
         void Delete(int orderId);
@@ -32,7 +32,7 @@ namespace OnlineShop.Service
             _context = context;
         }
 
-        public Order Create(int userId, int productId, int amount)
+        public Order Create(int userId, int productId, int amount, string size)
         {
             if(amount <= 0) 
                 throw new AppException("Incorrect product amount");
@@ -42,23 +42,24 @@ namespace OnlineShop.Service
             if (user == null)
                 throw new AppException("User not found");
             Product product = GetProduct(productId, amount);
+            if(!product.Sizes.Contains(size)) 
+                throw new AppException("Incorrect product size");
             List<OrderItem> items = new List<OrderItem>();
             OrderItem orderItem = new OrderItem
             {
                 ProductAmount = amount,
-                Subtotal = amount * product.Cost
+                Subtotal = amount * product.Cost,
+                Size = size
             };
             items.Add(orderItem);
             Order order = new Order
             {
                 OrderDate = DateTime.Now,
-                IsAccepted = false,
-                IsPaid = false,
                 TotalValue = orderItem.Subtotal,
                 OrderItems = items,
                 User = user,
                 UserId = user.UserId,
-                Status = ""
+                Status = OrderStatus.Created
             };
             if (product.OrderItems == null)
                 product.OrderItems = new List<OrderItem>();
@@ -76,20 +77,23 @@ namespace OnlineShop.Service
             return order;
         }
 
-        public Order AddToBasket(int orderId, int productId, int amount)
+        public Order AddToBasket(int orderId, int productId, int amount, string size)
         {
             if(amount <= 0) 
                 throw new AppException("Incorrect product amount");
             Order order = GetOrder(orderId);
-            if(order.IsAccepted)
-                throw new AppException("Cannot modify accepted order");
+            if(order.Status != OrderStatus.Created)
+                throw new AppException("Cannot modify {0} order", order.Status.ToString());
             Product product = GetProduct(productId, amount);
+            if(!product.Sizes.Contains(size)) 
+                throw new AppException("Incorrect product size");
             if(order.OrderItems == null)
                 order.OrderItems = new List<OrderItem>();
             OrderItem item = new OrderItem 
             { 
                 ProductAmount = amount,
-                Subtotal = amount * product.Cost
+                Subtotal = amount * product.Cost,
+                Size = size
             };
             order.OrderItems.Add(item);
             order.TotalValue += item.Subtotal;
@@ -108,8 +112,8 @@ namespace OnlineShop.Service
             if(amount <= 0) 
                 throw new AppException("Incorrect product amount");
             Order order = GetOrder(orderId);
-            if(order.IsAccepted)
-                throw new AppException("Cannot modify accepted order");
+            if(order.Status != OrderStatus.Created)
+                throw new AppException("Cannot modify {0} order", order.Status.ToString());
             Product product = GetProduct(productId);
             if(order.OrderItems == null || product.OrderItems == null)
                  throw new AppException("Order item not found");
@@ -192,9 +196,11 @@ namespace OnlineShop.Service
         public void PayOrder(int orderId)
         {  
             Order order = GetOrder(orderId);
-            if(order.IsPaid)
+            if(order.Status == OrderStatus.Paid)
                 throw new AppException("Order already paid");
-            order.IsPaid = true;
+            if(order.Status != OrderStatus.Accepted)
+                throw new AppException("Cannot paid {0} order", order.Status.ToString());
+            order.Status = OrderStatus.Paid;
             order.PaymentDate = DateTime.Now;
             _context.Orders.Update(order);
             _context.SaveChangesAsync();
@@ -218,8 +224,8 @@ namespace OnlineShop.Service
         public Order RemoveFromBasket(int orderId, int productId)
         {
             Order order = GetOrder(orderId);
-            if(order.IsAccepted)
-                throw new AppException("Cannot modify accepted order");
+            if(order.Status != OrderStatus.Created)
+                throw new AppException("Cannot modify {0} order", order.Status.ToString());
             Product product = GetProduct(productId);
             if(order.OrderItems == null || product.OrderItems == null)
                  throw new AppException("Order item not found");
@@ -240,19 +246,28 @@ namespace OnlineShop.Service
 
         public void ChangeStatus(int id, string status)
         {
-            Order order = GetOrder(id);
-            order.Status = status;
-            _context.Orders.Update(order);
-            _context.SaveChangesAsync();
+            OrderStatus orderStatus;
+            if(Enum.TryParse(status, true, out orderStatus)) {
+                if(Enum.IsDefined(typeof(OrderStatus), orderStatus)) {
+                    Order order = GetOrder(id);
+                    order.Status = orderStatus;
+                    _context.Orders.Update(order);
+                    _context.SaveChangesAsync();
+                } else {
+                    throw new AppException("{0} is not a value of the Order Status", status);
+                }
+            } else {
+                throw new AppException("{0} is not a member of the Order Status", status);
+            }
         }
+
 
         public void SubmitOrder(int orderId)
         {
             Order order = GetOrder(orderId);
-            if(order.IsAccepted)
-                throw new AppException("Order already accepted"); 
-            order.IsAccepted = true;
-            order.Status = "Accepted";
+            if(order.Status != OrderStatus.Created)
+                throw new AppException("Cannot accept {0} order", order.Status.ToString()); 
+            order.Status = OrderStatus.Accepted;
             order.AcceptedDate = DateTime.Now;
             _context.Orders.Update(order);
             _context.SaveChangesAsync();
