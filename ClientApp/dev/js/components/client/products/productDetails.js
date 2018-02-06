@@ -89,7 +89,16 @@ export class ProductDetailsComponent extends Component {
 function mapStateToProps(state, ownProps) {
     return {
         product: state.products.product,
-        productId: ownProps.match.params.id
+        productId: ownProps.match.params.id,
+        onSubmit: async (values, dispatch) => {
+            try {
+
+                //dispatch(addProduct(mapFormValuesToStoreModel(values, smallPhoto, bigPhoto)))
+            }
+            catch (err) {
+                console.log(err)
+            }
+        }
     }
 }
 

@@ -287,3 +287,15 @@
     margin-top: 3px;
     margin-right: 40px;
 }
+
+.basket-badge{
+    background-color: red !important;
+}
+
+.basket-icon-wrapper{
+    display: flex !important;
+}
+
+.basket-badge-wrapper{
+    margin-top: 8px;
+}

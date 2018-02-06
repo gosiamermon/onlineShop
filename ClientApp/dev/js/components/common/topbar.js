@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Nav, NavItem, Navbar, Dropdown, DropdownButton, NavDropdown, MenuItem } from 'react-bootstrap';
+import { Nav, NavItem, Navbar, Dropdown, DropdownButton, NavDropdown, MenuItem, Badge } from 'react-bootstrap';
 import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { logout } from '../../actions/auth/auth.action-creators'
@@ -15,7 +15,7 @@ class TopbarComponent extends Component {
     }
 
     render() {
-        const { userEmail, isClientPanel, isLoggedIn } = this.props
+        const { userEmail, isClientPanel, isLoggedIn, orderItemsCount } = this.props
 
         return (
             <Navbar collapseOnSelect fluid>
@@ -33,7 +33,13 @@ class TopbarComponent extends Component {
                 }
                 <Navbar.Collapse>
                     <ul className="nav navbar-nav navbar-right">
-                        <li>
+                        <li className="basket-icon-wrapper">
+                            {
+                                orderItemsCount > 0 &&
+                                <h2 className="basket-badge-wrapper">
+                                    <span className="badge basket-badge">{orderItemsCount}</span>
+                                </h2>
+                            }
                             <h2 className="basket-icon">
                                 <FaShoppingBasket />
                             </h2>
@@ -83,7 +89,8 @@ function mapStateToProps(state, ownProps) {
     return {
         isClientPanel: ownProps.isClientPanel,
         userEmail: state.auth.userEmail,
-        isLoggedIn: state.auth.loggedIn
+        isLoggedIn: state.auth.loggedIn,
+        orderItemsCount: state.orders.ordersByUser.length
     }
 }
 

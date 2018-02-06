@@ -1,6 +1,6 @@
 
 import { API_URL } from '../../../config'
-import { ORDER_FETCHED, ORDERS_FETCHED } from './orders.action-types'
+import { ORDER_FETCHED, ORDERS_FETCHED, ORDERS_BYUSER_FETCHED } from './orders.action-types'
 import { push } from "connected-react-router";
 import { adminPanelOrders } from "../../helpers/routes"
 import moment from "moment";
@@ -99,10 +99,40 @@ export const changeStatus = (id, status) => {
             })
         }
         catch (error) {
-            console.error("Product editing failed", error)
+            console.error("Change status failed", error)
             return;
         }
 
         dispatch(getOrder(id))
+    }
+}
+
+export const getOrdersByUser = (userId) => {
+    return async (dispatch) => {
+        let response;
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
+
+        try {
+            response = await fetch(`${API_URL}order/GetAllReletedByUser/${userId}`, {
+                mode: "cors",
+                method: "get",
+                headers: headers
+            })
+        }
+        catch (error) {
+            console.error("Get orders by user failed", error)
+        }
+        const ordersData = await response.json()
+
+        const orders = ordersData.map(order => {
+            order.orderDate = moment(order.orderDate).format("DD-MM-YYYY HH:mm")
+            return order
+        })
+
+        dispatch({
+            type: ORDERS_BYUSER_FETCHED,
+            payload: orders
+        })
     }
 }
