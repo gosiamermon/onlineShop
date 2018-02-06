@@ -4,14 +4,20 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import { logout } from '../../actions/auth/auth.action-creators'
 import { push } from "connected-react-router";
-import { login } from '../../helpers/routes'
+import { login, basket } from '../../helpers/routes'
 import { Navigation } from './navigation'
 import { clothing, footwear, accessories } from '../../helpers/productCategories'
 import FaShoppingBasket from 'react-icons/lib/fa/shopping-basket'
+import { getCurrentOrder } from '../../actions/orders/orders.action-creators'
 
 class TopbarComponent extends Component {
     constructor(props) {
         super(props)
+
+    }
+
+    componentDidMount() {
+        this.props.getCurrentOrder(sessionStorage.userId)
     }
 
     render() {
@@ -33,17 +39,20 @@ class TopbarComponent extends Component {
                 }
                 <Navbar.Collapse>
                     <ul className="nav navbar-nav navbar-right">
-                        <li className="basket-icon-wrapper">
-                            {
-                                orderItemsCount > 0 &&
-                                <h2 className="basket-badge-wrapper">
-                                    <span className="badge basket-badge">{orderItemsCount}</span>
+                        {
+                            isClientPanel &&
+                            <li onClick={() => { this.redirectToBasket() }} className="basket-icon-wrapper">
+                                {
+                                    orderItemsCount > 0 &&
+                                    <h2 className="basket-badge-wrapper">
+                                        <span className="badge basket-badge">{orderItemsCount}</span>
+                                    </h2>
+                                }
+                                <h2 className="basket-icon">
+                                    <FaShoppingBasket />
                                 </h2>
-                            }
-                            <h2 className="basket-icon">
-                                <FaShoppingBasket />
-                            </h2>
-                        </li>
+                            </li>
+                        }
                         {isClientPanel && isLoggedIn &&
                             <Navbar.Brand>
                                 <span>{userEmail}</span>
@@ -69,7 +78,7 @@ class TopbarComponent extends Component {
 
     getTitle() {
         if (this.props.isClientPanel) {
-            return "Your WardrobePro3000"
+            return "SuperShop"
         }
         return this.props.userEmail
     }
@@ -82,18 +91,26 @@ class TopbarComponent extends Component {
         this.props.push(`${login}`)
     }
 
+    redirectToBasket() {
+        this.props.push(`${basket}`)
+    }
+
 
 }
 
 function mapStateToProps(state, ownProps) {
+    let orderItemsCount = state.orders.order ? state.orders.order.orderItems.length : state.orders.currentOrder.itemsCount
+    if (!sessionStorage.userId) {
+        orderItemsCount = 0
+    }
     return {
         isClientPanel: ownProps.isClientPanel,
         userEmail: state.auth.userEmail,
         isLoggedIn: state.auth.loggedIn,
-        orderItemsCount: state.orders.ordersByUser.length
+        orderItemsCount: orderItemsCount
     }
 }
 
 export const Topbar = withRouter(
-    connect(mapStateToProps, { logout, push })(TopbarComponent)
+    connect(mapStateToProps, { logout, push, getCurrentOrder })(TopbarComponent)
 )

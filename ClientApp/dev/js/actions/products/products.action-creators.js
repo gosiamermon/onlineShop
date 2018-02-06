@@ -15,7 +15,7 @@ export const getAllProducts = () => {
             response = await fetch(`${API_URL}products`, {
                 mode: "cors",
                 method: "get",
-                headers
+                headers: headers
             });
         }
         catch (error) {

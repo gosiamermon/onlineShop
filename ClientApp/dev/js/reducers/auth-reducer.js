@@ -8,6 +8,7 @@ const initalAuthState = {
     accessToken: sessionStorage.getItem("access_token") || "",
     loggedIn: !!sessionStorage.getItem("access_token"),
     isAdmin: sessionStorage.getItem("isAdmin") === 'true',
+    userId: sessionStorage.getItem("userId") || null,
     error: null
 }
 

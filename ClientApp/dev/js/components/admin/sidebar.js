@@ -16,7 +16,7 @@ class Sidebar extends Component {
                 <ul className="sidebar-nav">
                     <li className="sidebar-brand">
                         <a href="/panel">
-                            YourWardrobe
+                            SuperShop
                         </a>
                     </li>
                     <li>

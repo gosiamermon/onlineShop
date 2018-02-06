@@ -10,7 +10,7 @@ namespace OnlineShop.DAL
     {
         public static void Initialize(ShopContext context)
         {
-            //context.Database.EnsureDeleted();
+             //context.Database.EnsureDeleted();
              context.Database.EnsureCreated();
 
            if(!context.Products.Any()) {

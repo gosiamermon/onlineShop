@@ -11,7 +11,7 @@ using OnlineShop.Service;
 
 namespace OnlineShop
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     public class OrderController : Controller
     {
@@ -29,8 +29,9 @@ namespace OnlineShop
         {
             try
             {
-                _orderService.Create(orderDto.UserId, orderDto.ProductId, orderDto.Amount, orderDto.Size);
-                return Ok();
+                var order = _orderService.Create(orderDto.UserId, orderDto.ProductId, orderDto.Amount, orderDto.Size);
+                var orderDetailsDto = _mapper.Map<OrderDetailsDto>(order);
+                return Ok(orderDetailsDto);
             } catch(AppException ex) 
             {
                 return BadRequest(ex.Message);
@@ -42,8 +43,9 @@ namespace OnlineShop
         {
             try
             {
-                _orderService.AddToBasket(orderDto.OrderId, orderDto.ProductId, orderDto.Amount, orderDto.Size);
-                return Ok();
+                var order = _orderService.AddToBasket(orderDto.OrderId, orderDto.ProductId, orderDto.Amount, orderDto.Size);
+                var orderDetailsDto = _mapper.Map<OrderDetailsDto>(order);
+                return Ok(orderDetailsDto);
             } catch(AppException ex) 
             {
                 return BadRequest(ex.Message);

@@ -13,5 +13,6 @@ namespace OnlineShop.DTO
         public double TotalValue { get; set; }
         public DateTime PaymentDate { get; set; }
         public string Status {get; set;}
+        public int OrderItemsCount {get; set; }
     }
 }

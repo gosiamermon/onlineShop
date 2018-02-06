@@ -299,3 +299,71 @@
 .basket-badge-wrapper{
     margin-top: 8px;
 }
+
+.basket-title-wrapper{
+    justify-content: center;
+}
+
+.basket-container{
+    width: 85%;
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+.basket-producer{
+    font-weight: bold;
+}
+
+.basket-item-container{
+    display: flex;
+}
+
+.img-basket{
+    height: 300px;
+}
+
+.basket-item-text{
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.amount-form{
+    width: 80px;
+}
+
+.list-group-item{
+    border: none !important;
+}
+
+.basket-details-container{
+    display: flex;
+    width: 50%;
+}
+
+.remove-button-container{
+    display: flex;
+    width: 50%;
+    justify-content: flex-end;
+}
+
+.remove-button{
+    margin-right: 80px;
+    cursor: pointer;
+}
+
+.noitems-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 250px;
+}
+
+.to-counter-nav{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 120px;
+    margin-bottom: 200px;
+}
+
+.navbar-brand{
+    color: pink !important;
+}

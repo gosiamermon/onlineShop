@@ -12,12 +12,14 @@ import { productSize } from '../../../helpers/productCategories'
 import { renderSelect } from "../../../helpers/form-helpers/select"
 import { required } from "../../../helpers/form-helpers/validators";
 import { FormGroup, Button } from "react-bootstrap";
+import { getCurrentOrder, addToBasket, createOrder } from '../../../actions/orders/orders.action-creators'
 
 export class ProductDetailsComponent extends Component {
 
 
     componentDidMount() {
         this.props.getProduct(this.props.productId)
+        this.props.getCurrentOrder(sessionStorage.userId)
     }
 
 
@@ -63,13 +65,13 @@ export class ProductDetailsComponent extends Component {
                                 <Form onSubmit={handleSubmit}>
 
                                     <Field
-                                        name="category"
+                                        name="size"
                                         type="text"
                                         required
                                         component={renderSelect}
                                         props={{
                                             label: "Choose size",
-                                            data: productSize
+                                            data: product.sizes
                                         }}
                                         validate={[required]} />
 
@@ -87,25 +89,35 @@ export class ProductDetailsComponent extends Component {
 }
 
 function mapStateToProps(state, ownProps) {
+
+    const productId = Number(ownProps.match.params.id);
+    const currentOrderId = state.orders.currentOrder.currentOrderId;
     return {
         product: state.products.product,
-        productId: ownProps.match.params.id,
+        productId: productId,
+        currentOrderId: currentOrderId,
         onSubmit: async (values, dispatch) => {
             try {
-
-                //dispatch(addProduct(mapFormValuesToStoreModel(values, smallPhoto, bigPhoto)))
+                const amount = 1;
+                if (currentOrderId) {
+                    dispatch(addToBasket(currentOrderId, productId, amount, values.size))
+                }
+                else {
+                    dispatch(createOrder(productId, amount, values.size))
+                }
             }
             catch (err) {
                 console.log(err)
             }
         }
     }
+
 }
 
 
 export const ProductDetails = compose(
     withRouter,
-    connect(mapStateToProps, { getProduct }),
+    connect(mapStateToProps, { getProduct, getCurrentOrder, addToBasket, createOrder }),
     reduxForm({
         form: "products-details",
         enableReinitialize: true

@@ -58,7 +58,6 @@ class AppComponent extends Component {
 }
 
 function mapStateToProps(state) {
-    console.log(state.auth)
     return {
         tokenExpireDate: state.auth.expireDate,
         loggedIn: state.auth.loggedIn,
