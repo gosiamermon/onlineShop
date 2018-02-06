@@ -9,12 +9,13 @@ export const getAllOrders = () => {
     return async (dispatch) => {
 
         let response;
-        //let headers = new Headers();
-        //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}order`, {
                 mode: "cors",
-                method: "get"
+                method: "get",
+                headers: headers
             });
         }
         catch (error) {
@@ -41,12 +42,13 @@ export const getAllOrders = () => {
 export const getOrder = (id) => {
     return async (dispatch) => {
         let response;
-        //let headers = new Headers();
-        //headers.append("Authorization", "Bearer " + sessionStorage.access_token);
+        let headers = new Headers();
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
         try {
             response = await fetch(`${API_URL}order/GetOrderById/${id}`, {
                 mode: "cors",
-                method: "get"
+                method: "get",
+                headers: headers
             });
         }
         catch (error) {
@@ -83,6 +85,7 @@ export const changeStatus = (id, status) => {
         let response;
         let headers = new Headers();
         headers.append("Content-type", "application/json");
+        headers.append("Authorization", "Bearer " + sessionStorage.access_token);
 
         try {
             response = await fetch(`${API_URL}order/ChangeStatus`, {
@@ -91,7 +94,7 @@ export const changeStatus = (id, status) => {
                 headers: headers,
                 body: JSON.stringify({
                     orderId: id,
-                    status: status
+                    status: status,
                 })
             })
         }
